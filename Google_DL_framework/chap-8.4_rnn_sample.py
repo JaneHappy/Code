@@ -14,6 +14,9 @@
 from tensorflow.models.rnn.ptb import reader
 ImportError: No module named models.rnn.ptb
 '''
+import tensorflow as tf 
+import ptb_word_lm
+import reader
 
 
 # 存放原始数据的路径。
