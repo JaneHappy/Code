@@ -47,16 +47,20 @@ PTB dataset: 	 train 929589,	 valid 73760, 	 test 82430.
 ##  = reader.ptb_raw_data(DATA_PATH)
 
 # 将训练数据组织成 batch 大小为4、截断长度为5的数据组。
-result = reader.ptb_iterator(train_data, 4, 5)
+##result = reader.ptb_iterator(train_data, 4, 5)
 # 读取第一个batch中的数据，其中包括每个时刻的输入和对应的正确输出。
-x, y = result.next()
+##x, y = result.next()
+
+x,y = reader.ptb_producer(train_data, 4, 5)
 print "X: ", x
 print "y: ", y
 
 '''
 运行以上程序可以得到输出：
 
-
+X:  Tensor("PTBProducer/StridedSlice:0", shape=(4, 5), dtype=int32)
+y:  Tensor("PTBProducer/StridedSlice_1:0", shape=(4, 5), dtype=int32)
+[Finished in 5.6s]
 '''
 
 
