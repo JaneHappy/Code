@@ -69,10 +69,26 @@ y:  Tensor("PTBProducer/StridedSlice_1:0", shape=(4, 5), dtype=int32)
 
 
 #---------------------------------------
-# 
+# |->  2017.7.23
+#
+# |->  @ 2017.7.24
+#  References:
+#  http://tensorlayer.readthedocs.io/en/latest/modules/iterate.html
 #---------------------------------------
+'''
+import tensorlayer as tl 
 
+batch = tl.iterate.ptb_iterator(train_data, batch_size=4, num_steps=5)
+x, y = batch
+print "X ---> ", x
+print "y ---> ", y
 
+Traceback (most recent call last):
+  File "/home/ubuntu/Program/Code/Google_DL_framework/chap-8.4.1_rnn_sample.py", line 82, in <module>
+    x, y = batch
+ValueError: too many values to unpack
+[Finished in 6.1s]
+'''
 
 
 
