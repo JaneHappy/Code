@@ -479,6 +479,176 @@ Ending Accuracy = 0.96
 #---------------------------------------
 
 
+# Stochastic Training
+print("Chapter 2.6 \t Stochastic Training")
+ops.reset_default_graph()
+sess = tf.Session()
+
+## Generate Data
+x_vals = np.random.normal(1, 0.1, 100)  #a Normal (mean=1, sd=0.1)
+y_vals = np.repeat(10., 100)
+x_data   = tf.placeholder(shape=[1], dtype=tf.float32)
+y_target = tf.placeholder(shape=[1], dtype=tf.float32)
+
+## Model Variables and Operations
+#	Create variables (one model parameter = A)
+A = tf.Variable(tf.random_normal(shape=[1]))
+#	Add operation to graph
+my_output = tf.multiply(x_data, A)
+
+## Loss Function
+#	Add L2 loss operation to graph
+loss = tf.square(my_output - y_target)
+
+## Optimization and Initialization
+#	Create Optimizer
+my_opt = tf.train.GradientDescentOptimizer(0.02)
+train_step = my_opt.minimize(loss)
+#	Initialize variables
+init = tf.global_variables_initializer()
+sess.run(init)
+
+## Train Model
+loss_stochastic = []
+#	Run loop
+for i in range(100):
+	rand_index = np.random.choice(100)
+	rand_x = [x_vals[rand_index]]
+	rand_y = [y_vals[rand_index]]
+	sess.run(train_step, feed_dict={x_data: rand_x, y_target: rand_y})
+	if (i+1)%5==0:
+		temp_loss = sess.run(loss, feed_dict={x_data: rand_x, y_target: rand_y})
+		print('Step #' + str(i+1) + '\tA = ' + str(sess.run(A)) + '\tLoss = ' + str(temp_loss))
+		loss_stochastic.append(temp_loss)
+
+accuracy_stochastic = []
+for x_val in x_vals:
+	accuracy_stochastic.append(sess.run( my_output, feed_dict={x_data: [x_val]} ))
+#accuracy_stochastic = sum(x==y for x,y in zip(accuracy_stochastic, y_vals))/100.
+#accuracy_stochastic = np.mean([x==y  for x,y in zip(accuracy_stochastic, y_vals)])
+accuracy_stochastic = np.mean([ np.abs(x-y)<=1e-6  for x,y in zip(accuracy_stochastic, y_vals)])
+
+
+# Batch Training
+print("Chapter 2.6 \t Batch Training")
+#	Re-initialize graph
+ops.reset_default_graph()
+sess = tf.Session()
+#	Declare batch size
+batch_size = 25
+
+## Generate Data
+x_vals = np.random.normal(1, 0.1, 100)  #a Normal (mean=1, sd=0.1)
+y_vals = np.repeat(10., 100)
+x_data   = tf.placeholder(shape=[None, 1], dtype=tf.float32)
+y_target = tf.placeholder(shape=[None, 1], dtype=tf.float32)
+
+## Model Variables and Operations
+#	Create variables (one model parameter = B)
+B = tf.Variable(tf.random_normal(shape=[1,1]))
+#	Add operation to graph
+my_output = tf.matmul(x_data, B)
+
+## Loss Function
+#	Add L2 loss operation to graph
+loss = tf.reduce_mean(tf.square(my_output - y_target))
+
+## Optimization and Initialization
+#	Initialize variables
+init = tf.global_variables_initializer()
+sess.run(init)  #or: sess.run(B.initializer)
+#	Create Optimizer
+my_opt = tf.train.GradientDescentOptimizer(0.02)
+train_step = my_opt.minimize(loss)
+
+## Train Model
+loss_batch = []
+#	Run loop
+for i in range(100):
+	rand_index = np.random.choice(100, size=batch_size)
+	rand_x = np.transpose([x_vals[rand_index]])
+	rand_y = np.transpose([y_vals[rand_index]])
+	sess.run(train_step, feed_dict={x_data: rand_x, y_target: rand_y})
+	if (i+1)%5==0:
+		temp_loss = sess.run(loss, feed_dict={x_data: rand_x, y_target: rand_y})
+		print('Step #' + str(i+1) + '\tA = ' + str(sess.run(B)) + '\tLoss = ' + str(temp_loss))
+		loss_batch.append(temp_loss)
+
+accuracy_batch_____ = tf.constant(x_vals, dtype=tf.float32)
+accuracy_batch_____ = tf.expand_dims(accuracy_batch_____, axis=1)
+accuracy_batch_____ = sess.run( my_output, feed_dict={x_data: sess.run(accuracy_batch_____)} )
+#accuracy_batch_____ = sum(x==y for x,y in zip(accuracy_batch_____, y_vals))/100.
+#accuracy_batch_____ = np.mean(np.array(accuracy_batch_____) == np.array(y_vals))
+accuracy_batch_____ = np.mean([ np.abs(x-y)<=1e-6  for x,y in zip(accuracy_batch_____, y_vals)])
+
+
+# Plot Stochastic vs Batch Training
+plt.figure()
+plt.plot(range(0, 100, 5), loss_stochastic, 'b-' , label='Stochastic Loss')
+plt.plot(range(0, 100, 5), loss_batch     , 'r--', label='Batch Loss, size=20')
+plt.legend(loc='upper right', prop={'size': 11})
+plt.show()
+
+print("Accuracy of Stochastic ", np.round(accuracy_stochastic, 4))
+print("Accuracy of Batch      ", np.round(accuracy_batch_____, 4))
+
+'''
+2018-02-28 21:02:47.716037: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX
+[Finished in 52.1s]
+[Finished in 24.8s]
+
+2018-02-28 21:08:58.634696: 
+Chapter 2.6 	 Stochastic Training
+Step #5	A = [ 1.38689542]	Loss = [ 72.70297241]
+Step #10	A = [ 3.01853108]	Loss = [ 53.4449234]
+Step #15	A = [ 4.26904154]	Loss = [ 33.80847931]
+Step #20	A = [ 5.29814005]	Loss = [ 26.43682671]
+Step #25	A = [ 6.15784979]	Loss = [ 13.1345892]
+Step #30	A = [ 6.90465927]	Loss = [ 17.45701408]
+Step #35	A = [ 7.40970993]	Loss = [ 3.63630199]
+Step #40	A = [ 8.00195885]	Loss = [ 8.43712044]
+Step #45	A = [ 8.29240799]	Loss = [ 1.41703427]
+Step #50	A = [ 8.72628593]	Loss = [ 6.03347445]
+Step #55	A = [ 8.93351841]	Loss = [ 0.48859617]
+Step #60	A = [ 9.13013649]	Loss = [ 2.19901967]
+Step #65	A = [ 9.32742882]	Loss = [ 2.09343505]
+Step #70	A = [ 9.49464989]	Loss = [ 5.33907413]
+Step #75	A = [ 9.58685493]	Loss = [ 0.03160714]
+Step #80	A = [ 9.43920231]	Loss = [ 0.35913581]
+Step #85	A = [ 9.60065746]	Loss = [ 0.52991134]
+Step #90	A = [ 9.74435139]	Loss = [ 1.13328588]
+Step #95	A = [ 9.81785965]	Loss = [ 0.02740372]
+Step #100	A = [ 9.73111916]	Loss = [ 0.03243995]
+Chapter 2.6 	 Batch Training
+Step #5	A = [[ 1.31299376]]	Loss = 75.3061
+Step #10	A = [[ 2.90114713]]	Loss = 51.2809
+Step #15	A = [[ 4.20878553]]	Loss = 35.2325
+Step #20	A = [[ 5.2696991]]	Loss = 22.7136
+Step #25	A = [[ 6.13378239]]	Loss = 15.08
+Step #30	A = [[ 6.83361578]]	Loss = 10.2534
+Step #35	A = [[ 7.40194225]]	Loss = 7.79604
+Step #40	A = [[ 7.88466835]]	Loss = 6.00479
+Step #45	A = [[ 8.24999809]]	Loss = 3.02895
+Step #50	A = [[ 8.54876614]]	Loss = 2.95714
+Step #55	A = [[ 8.79451466]]	Loss = 2.49639
+Step #60	A = [[ 9.0091877]]	Loss = 1.67813
+Step #65	A = [[ 9.16112041]]	Loss = 0.897072
+Step #70	A = [[ 9.27885151]]	Loss = 1.22824
+Step #75	A = [[ 9.38236046]]	Loss = 0.869105
+Step #80	A = [[ 9.48802471]]	Loss = 1.05145
+Step #85	A = [[ 9.56782913]]	Loss = 1.1546
+Step #90	A = [[ 9.63324642]]	Loss = 0.823927
+Step #95	A = [[ 9.67089939]]	Loss = 0.872329
+Step #100	A = [[ 9.68953323]]	Loss = 0.954898
+Accuracy of Stochastic  0.0
+Accuracy of Batch       0.0
+[Finished in 19.4s]
+'''
+
+
+
+
+
 
 
 #---------------------------------------
