@@ -294,7 +294,7 @@ plt.plot(x_array, hinge_y_out   , 'b-' , label='Hinge Loss')
 plt.plot(x_array, xentropy_y_out, 'r--', label='Cross Entropy Loss')
 plt.plot(x_array, xentropy_sigmoid_y_out , 'k-.', label='Cross Entropy Sigmoid Loss')
 plt.plot(x_array, xentropy_weighted_y_out, 'g:' , label='Weighted Cross Entropy Loss (x0.5)')
-#plt.ylim(-1.5, 3)
+plt.ylim(-1.5, 3)
 #plt.xlim(-1, 3)
 plt.legend(loc='lower right', prop={'size': 11})
 plt.show()
@@ -310,7 +310,7 @@ plt.plot(x_array, xentropy_weighted_y_out, 'r-', label='Weighted Cross Entropy L
 plt.plot(x_array, my_out_3, 'b--', label='First  Calculation')
 plt.plot(x_array, my_out_4, 'g:' , label='Second Calculation')
 plt.legend(loc='lower right')
-plt.show()
+#plt.show()
 
 
 2018-02-28 17:40:47.500771: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX
@@ -347,6 +347,129 @@ print(sess.run(sparse_xentropy))
 #---------------------------------------
 #		05 Implementing Back Propagation
 #---------------------------------------
+
+'''
+
+sess = tf.Session()
+
+# A Regression Example
+x_vals = np.random.normal(1, 0.1, 100)  # a normal (mean of 1.0, stdev of 0.1)
+y_vals = np.repeat(10., 100)
+x_data   = tf.placeholder(shape=[1], dtype=tf.float32)
+y_target = tf.placeholder(shape=[1], dtype=tf.float32)
+#	Create variable (one model parameter = A)
+A = tf.Variable(tf.random_normal(shape=[1]))
+#	Add operation to graph
+my_output = tf.multiply(x_data, A)
+#	Add L2 loss operation to graph
+loss = tf.square(my_output - y_target)
+#	Initialize variables
+init = tf.global_variables_initializer()
+sess.run(init)
+#	Create Optimizer
+my_opt = tf.train.GradientDescentOptimizer(0.02)  #learning_rate
+train_step = my_opt.minimize(loss)
+
+# Running the Regression Graph
+#	Run Loop
+for i in range(100):
+	rand_index = np.random.choice(100)  #.choice(maximum, size=(..))
+	rand_x = [x_vals[rand_index]]
+	rand_y = [y_vals[rand_index]]
+	sess.run(train_step, feed_dict={x_data: rand_x, y_target: rand_y})
+	if (i+1)%25==0:
+		print('Step #' + str(i+1) + ' A = ' + str(sess.run(A)))
+		print('Loss = ' + str(sess.run(loss, feed_dict={x_data: rand_x, y_target: rand_y})))
+
+
+# Classification Example
+#	Create data
+x_vals = np.concatenate((np.random.normal(-1, 1, 50), np.random.normal(3, 1, 50)))
+y_vals = np.concatenate((np.repeat(0., 50), np.repeat(1., 50)))  #size=(100,)
+x_data   = tf.placeholder(shape=[1], dtype=tf.float32)
+y_target = tf.placeholder(shape=[1], dtype=tf.float32)
+#	Create variable (one model parameter = A)
+A = tf.Variable(tf.random_normal(mean=10, shape=[1]))
+
+#	 Add operation to graph
+#	 Want to create the operstion sigmoid(x + A)
+#	 Note, the sigmoid() part is in the loss function
+my_output = tf.add(x_data, A)
+#	 Now we have to add another dimension to each (batch size of 1)
+my_output_expanded = tf.expand_dims(my_output, 0)
+y_target_expanded  = tf.expand_dims(y_target , 0)
+
+xentropy = tf.nn.sigmoid_cross_entropy_with_logits(logits=my_output_expanded, labels=y_target_expanded)
+#	 Create Optimizer
+my_opt = tf.train.GradientDescentOptimizer(0.05)
+train_step = my_opt.minimize(xentropy)
+#	 Initialize variables
+init = tf.global_variables_initializer()
+sess.run(init)
+
+# Running the Classification Graph
+#	Run loop
+for i in range(1400):
+	rand_index = np.random.choice(100)
+	rand_x = [x_vals[rand_index]]
+	rand_y = [y_vals[rand_index]]
+	sess.run(train_step, feed_dict={x_data: rand_x, y_target: rand_y})
+	if (i+1)%200==0:
+		print('Step #' + str(i+1) + ' A = ' + str(sess.run(A)))
+		print('Loss = ' + str(sess.run(xentropy, feed_dict={x_data: rand_x, y_target: rand_y})))
+
+
+# 	Evaluate Predictions
+predictions = []
+for i in range(len(x_vals)):
+	x_val = [x_vals[i]]
+	prediction = sess.run(tf.round(tf.sigmoid(my_output)), feed_dict={x_data: x_val})
+	predictions.append(prediction[0])
+accuracy = sum(x==y for x,y in zip(predictions, y_vals))/100.
+print('Ending Accuracy = ' + str(np.round(accuracy, 2)))
+
+
+
+2018-02-28 18:29:40.234289: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX
+Step #25 	A = [ 6.11608648]	Loss = [ 16.08420181]
+Step #50 	A = [ 8.52250576]	Loss = [  5.10827351]
+Step #75 	A = [ 9.24069977]	Loss = [  1.14894378]
+Step #100 	A = [ 9.71889877]	Loss = [  0.4407751 ]
+[Finished in 2.0s]
+
+2018-02-28 18:44:25.064733: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX
+[ 1.16012561]
+[ 0.00012564]
+Step #25 	A = [ 6.87281036]	Loss = [ 14.14905739]
+Step #50 	A = [ 8.9189167 ]	Loss = [  1.28802204]
+Step #75 	A = [ 9.77301693]	Loss = [  0.3833788 ]
+Step #100 	A = [ 9.62869167]	Loss = [  2.50389123]
+Step #200 		A = [ 6.78434467]	Loss = [[  3.24778448e-05]]
+Step #400 		A = [ 2.04075623]	Loss = [[ 1.83606267]]
+Step #600 		A = [-0.15876967]	Loss = [[ 0.53752458]]
+Step #800 		A = [-0.83228946]	Loss = [[ 0.01623671]]
+Step #1000 		A = [-0.96144277]	Loss = [[ 0.03637504]]
+Step #1200 		A = [-1.08885336]	Loss = [[ 0.30568787]]
+Step #1400 		A = [-0.82672775]	Loss = [[ 0.1000525 ]]
+[Finished in 3.0s]
+
+2018-02-28 18:50:33.832883: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX
+[ 1.16012561]
+[ 0.00012564]
+Step #25 	A = [ 6.13512325]	Loss = [ 7.87540627]
+Step #50 	A = [ 8.50735569]	Loss = [ 0.14130819]
+Step #75 	A = [ 9.42903709]	Loss = [  7.48194871e-05]
+Step #100 	A = [ 9.65153313]	Loss = [ 1.11493409]
+Step #200 		A = [ 4.85303402]	Loss = [[ 4.48928118]]
+Step #400 		A = [ 1.11574042]	Loss = [[ 0.0349636 ]]
+Step #600 		A = [-0.5154478 ]	Loss = [[ 0.02781134]]
+Step #800 		A = [-0.96965766]	Loss = [[ 0.08468418]]
+Step #1000 		A = [-1.10859692]	Loss = [[ 1.09603882]]
+Step #1200 		A = [-1.22808003]	Loss = [[ 0.2578792 ]]
+Step #1400 		A = [-1.28782296]	Loss = [[ 0.11318245]]
+Ending Accuracy = 0.96
+[Finished in 4.3s]
+'''
 
 
 
