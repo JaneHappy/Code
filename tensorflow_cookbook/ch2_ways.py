@@ -2,6 +2,8 @@
 # tensorflow_cookbook
 #	02 TensorFlow Way
 #		01 Operations as a Computational Graph
+#		...
+#		06 Working with Batch and Stochastic Training
 
 from __future__ import division
 from __future__ import print_function
@@ -62,6 +64,7 @@ import tensorflow as tf
 import os
 from tensorflow.python.framework import ops
 ops.reset_default_graph()
+'''
 
 # Create a graph session
 sess = tf.Session()
@@ -109,7 +112,7 @@ merged = tf.summary.merge_all(key='summaries')
 if not os.path.exists('tensorboard_logs/'):
 	os.makedirs('tensorboard_logs/')
 my_writer = tf.summary.FileWriter('tensorboard_logs/', sess.graph)
-'''
+
 
 '''
 2018-02-28 15:19:56.674010: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX
@@ -129,7 +132,6 @@ my_writer = tf.summary.FileWriter('tensorboard_logs/', sess.graph)
 #		03 Working with Multiple Layers
 #---------------------------------------
 
-'''
 
 sess = tf.Session()
 ## Create a small random 'image' of size 4x4
@@ -163,7 +165,6 @@ with tf.name_scope('Custom_Layer') as scope:
 print(sess.run(mov_avg_layer, feed_dict={x_data: x_val}))
 print(sess.run(custom_layer1, feed_dict={x_data: x_val}))
 
-'''
 
 
 '''
@@ -195,7 +196,7 @@ print(sess.run(custom_layer1, feed_dict={x_data: x_val}))
 sess = tf.Session()
 
 
-'''
+
 # Numerical Predictions
 
 #	 Various Predicted X-values
@@ -237,12 +238,13 @@ plt.legend(loc='lower right', prop={'size': 11})
 plt.show()
 
 
+'''
 2018-02-28 17:01:20.020701: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX
 [Finished in 95.1s]
 '''
 
 
-'''
+
 
 # Categorical Predictions
 #	Various predicted X values
@@ -310,9 +312,10 @@ plt.plot(x_array, xentropy_weighted_y_out, 'r-', label='Weighted Cross Entropy L
 plt.plot(x_array, my_out_3, 'b--', label='First  Calculation')
 plt.plot(x_array, my_out_4, 'g:' , label='Second Calculation')
 plt.legend(loc='lower right')
-#plt.show()
+plt.show()
 
 
+'''
 2018-02-28 17:40:47.500771: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX
 [Finished in 110.9s]
 '''
@@ -348,7 +351,7 @@ print(sess.run(sparse_xentropy))
 #		05 Implementing Back Propagation
 #---------------------------------------
 
-'''
+
 
 sess = tf.Session()
 
@@ -430,6 +433,7 @@ print('Ending Accuracy = ' + str(np.round(accuracy, 2)))
 
 
 
+'''
 2018-02-28 18:29:40.234289: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX
 Step #25 	A = [ 6.11608648]	Loss = [ 16.08420181]
 Step #50 	A = [ 8.52250576]	Loss = [  5.10827351]
@@ -592,6 +596,7 @@ plt.show()
 print("Accuracy of Stochastic ", np.round(accuracy_stochastic, 4))
 print("Accuracy of Batch      ", np.round(accuracy_batch_____, 4))
 
+
 '''
 2018-02-28 21:02:47.716037: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX
 [Finished in 52.1s]
@@ -648,12 +653,10 @@ Accuracy of Batch       0.0
 
 
 
-
-
-
 #---------------------------------------
 #		07 Combining Everything Together
 #---------------------------------------
+
 
 
 
