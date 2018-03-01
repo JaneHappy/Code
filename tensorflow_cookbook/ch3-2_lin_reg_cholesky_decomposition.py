@@ -72,7 +72,7 @@ for i in x_vals:
 plt.plot(x_vals, y_vals,   'o',  label='Data')
 plt.plot(x_vals, best_fit, 'r-', label='Best fit line', linewidth=3)
 plt.legend(loc='upper left')
-plt.show()
+#plt.show()
 
 
 '''
@@ -162,7 +162,7 @@ plt.figure()
 plt.plot(x_vals[:,0], y_vals,   'ro', label='Data')
 plt.plot(x_vals[:,0], best_fit, 'b*', label='Best fit points')
 plt.legend(loc='upper left')
-plt.show()
+#plt.show()
 
 
 '''
@@ -186,6 +186,7 @@ Cholesky Decomposition:
 plt.close('all')
 
 plt.figure()
+plt.clf()
 all_color = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'w']
 for i in range(num_labels):
 	this_index = (y_vals == i)
@@ -193,26 +194,27 @@ for i in range(num_labels):
 	this_y = y_vals[this_index]
 	this_color  = all_color[i] + 'o'
 	this_legend = "Class " + str(i)
-	plt.plot(this_x, this_y, this_color, label=this_legend)
-plt.plot(x_vals, best_fit, 'k*', label='Best fit points')
-plt.legend(loc='upper left')
+	plt.plot(this_x[:,0], this_y, this_color, label=this_legend)
+	print("Plot", i, "legend", this_legend, "color", this_color)
+plt.plot(x_vals[:,0], best_fit, 'k*', label='Best fit points')
+plt.legend()#loc='upper left')
 plt.show()
 
 
 plt.close('all')
-plt.figure()
+plt.figure() #plt.clf()
 for i in range(num_labels):
 	this_index = (y_vals == i)
 	this_x = x_vals[this_index]
 	this_y = y_vals[this_index]
 	this_color  = all_color[i] + 'o'
 	this_legend = "Class " + str(i)
-	plt.plot(this_x, this_y, this_color, label=this_legend)
+	plt.plot(this_x[:,0], this_y, this_color, label=this_legend)
 
 	this_z = best_fit[this_index]
 	this_color  = all_color[i] + '*'
 	this_legend = 'Best ' + str(i)
-	plt.plot(this_x, this_z, this_color, label=this_legend)
+	plt.plot(this_x[:,0], this_z, this_color, label=this_legend)
 #plt.plot(x_vals, best_fit, 'k*', label='Best fit points')
 plt.legend(loc='upper left')
 plt.show()
