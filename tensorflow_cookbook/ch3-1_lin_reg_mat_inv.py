@@ -78,7 +78,7 @@ ops.reset_default_graph()
 sess = tf.Session()
 
 num_samples = 100
-num_feature = 2
+num_feature = 3 
 x_vals = np.random.rand(num_samples, num_feature)
 y_vals = np.random.randint(2, size=num_samples)  #size=(num_samles,) #size=(num_samples)
 
@@ -156,6 +156,10 @@ y_intercept: -0.202235749085
 Coefficients and Bias:
 	 y = 1.1673993739 `x_i1 + 1.36167177963 `x_i2 + 3.78926043185
 [Finished in 59.0s]
+
+--------------- previously, num_feature = 2
+--------------- after ,     num_feature = 3
+
 '''
 
 
