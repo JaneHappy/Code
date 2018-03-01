@@ -52,17 +52,17 @@ model_output = tf.add(tf.matmul(x_data, A), b) 	#[None,1]
 #	 Declare the elastic net loss function
 elastic_param1 = tf.constant(1.)
 elastic_param2 = tf.constant(1.)
-l1_a_loss = tf.reduce_mean(tf.abs(   A)) 			#[3,1]
+l1_a_loss = tf.reduce_mean(tf.abs(   A)) 			#[3,1] -> a number
 l2_a_loss = tf.reduce_mean(tf.square(A)) 			#[3,1] -> a number
-e1_term   = tf.multiply(elastic_param1, l1_a_loss) 	#[3,1]
+e1_term   = tf.multiply(elastic_param1, l1_a_loss) 	#a number
 e2_term   = tf.multiply(elastic_param2, l2_a_loss) 	#a number
 loss      = tf.expand_dims(tf.add(tf.add(tf.reduce_mean(tf.square(y_target - model_output)), e1_term), e2_term), 0)
 '''
 tf.square(y_target - model_output) 		#[None,1]
 tf.reduce_mean(.) 						#a number
-tf.add(., e1_term) 						#[3,1]
-tf.add(., e2_term) 						#[3,1]
-tf.expand_dims(., 0) 					#[1,3,1]
+tf.add(., e1_term) 						#a number
+tf.add(., e2_term) 						#a number
+tf.expand_dims(., 0) 					#[1,]
 '''
 
 #	 Declare optimizer
@@ -96,6 +96,30 @@ Step #1000 	 A = [[ 1.09745109] [ 0.54604095] [ 0.13102381]] 	 b = [[ 0.10402215
 [Finished in 4.2s]
 '''
 
+
+# Extract model results
+#	 Get the optimal coefficients
+[[sw_coef], [pl_coef], [pw_coef]] = sess.run(A)
+[y_intercept] = sess.run(b)
+
+plt.figure()
+# Plot results
+#	 Plot loss over time
+plt.plot(loss_vec, 'k-')
+plt.xlabel('Generation')
+plt.ylabel('Loss')
+plt.title('Loss per Generation')
+plt.show()
+
+
+'''
+2018-03-02 01:04:21.155636: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX
+Step #250 	 A = [[ 1.26014626] [ 0.4016138 ] [ 0.40159121]] 	 b = [[-0.14889474]] 	 Loss = [ 1.59188581]
+Step #500 	 A = [[ 1.17897248] [ 0.46715766] [ 0.29896322]] 	 b = [[-0.0677181]] 	 Loss = [ 1.46314824]
+Step #750 	 A = [[ 1.13416564] [ 0.51899707] [ 0.21090424]] 	 b = [[ 0.01904622]] 	 Loss = [ 1.37157845]
+Step #1000 	 A = [[ 1.09745109] [ 0.54604095] [ 0.13102381]] 	 b = [[ 0.10402215]] 	 Loss = [ 1.27774763]
+[Finished in 27.3s]
+'''
 
 
 
