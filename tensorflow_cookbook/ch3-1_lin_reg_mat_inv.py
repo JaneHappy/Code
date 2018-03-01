@@ -160,6 +160,14 @@ Coefficients and Bias:
 --------------- previously, num_feature = 2
 --------------- after ,     num_feature = 3
 
+6th
+2018-03-01 11:15:42.491723: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX
+slope      : 0.979625109938
+y_intercept: 0.115425758141
+Coefficients and Bias:
+	 y = 1.20492395523 `x_i1 + 1.85352517055 `x_i2 + -1.70861222984 `x_i3 + 4.45721597004
+[Finished in 80.8s]
+
 '''
 
 
