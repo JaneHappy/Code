@@ -41,7 +41,17 @@ if not os.path.exists(birth_weight_file):
 '''
 2018-03-02 01:16:32.435235: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX
 [Finished in 8.2s]
+
+2018-03-02 01:22:51.584208: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX
+[Finished in 4.3s]
 '''
+
+
+#	 read birth weight data into memory
+birth_data = []
+#with open(birth_weight_file, newline='') as csvfile:
+#	csv_reader   = csv.reader(csvfile)
+#	birth_header = 
 
 
 
