@@ -475,6 +475,9 @@ def cifar_cnn_model(input_images, batch_size, train_logical=True):
 				(5) relu_conv1 		->  [batch_size, out_h1, out_w1, 64]
 				(iii) 	output:	[batch_size, out_h1, out_w1, 64]	->	[batch_size, 24,24,64]
 		'''
+	print('def cifar_cnn_model:')
+	print('\t scope: conv1')
+	print('\t\t', conv1_kernel.name, '\n\t\t', conv1_bias.name, '\n\t\t', conv1.name, conv1_add_bias.name, relu_conv1.name)
 
 	# Max Pooling
 	pool1 = tf.nn.max_pool(relu_conv1, ksize=[1,3,3,1], strides=[1,2,2,1], padding='SAME', name='pool_layer1')
@@ -496,6 +499,7 @@ def cifar_cnn_model(input_images, batch_size, train_logical=True):
 			pool1 			#[batch_size, new_h1, new_w1, 64]
 				(7) 	output: same as 'pool1'
 	'''
+	print('\t\t * \t', pool1.name, norm1.name)
 
 	# Second Convolutional Layer
 	with tf.variable_scope('conv2') as scope:
@@ -526,6 +530,8 @@ def cifar_cnn_model(input_images, batch_size, train_logical=True):
 				(5) relu_conv2 		=  [batch_size, out_h2, out_w2, 64]
 				(iii) 	output:	[batch_size, out_h2, out_w2, 64] 	->  [batch_size, 12,12,64]
 		'''
+	print('\t scope: conv2')
+	print('\t\t', conv2_kernel.name, '\n\t\t', conv2_bias.name, '\n\t\t', conv2.name, conv2_add_bias.name, relu_conv2.name)
 
 	# Max Pooling
 	pool2 = tf.nn.max_pool(relu_conv2, ksize=[1,3,3,1], strides=[1,2,2,1], padding='SAME', name='pool_layer2')
@@ -546,6 +552,7 @@ def cifar_cnn_model(input_images, batch_size, train_logical=True):
 			pool2 			#[batch_size, new_h2, new_w2, 64] 		->  [batch_size, 6, 6, 64]
 				(7) 	output: same as 'pool2'
 	'''
+	print('\t\t * \t', pool2.name, norm2.name)
 
 	# Reshape output into a single matrix for multiplication for the fully connected layers
 	reshape_output = tf.reshape(norm2, [batch_size, -1])
@@ -557,6 +564,7 @@ def cifar_cnn_model(input_images, batch_size, train_logical=True):
 		reshape_dim     #a number
 				(2) 	output: new_h2 * new_w2 * 64 				->  6*6*64 = 2304
 	'''
+	print('\t reshape \t', reshape_output.name, reshape_dim.name)
 
 	# First Fully Connected Layer
 	with tf.variable_scope('full1') as scope:
@@ -573,6 +581,8 @@ def cifar_cnn_model(input_images, batch_size, train_logical=True):
 				(2) tf.add(., full_bias1) 						#[batch_size, 384]
 				(3) tf.nn.relu(.) 								#[batch_size, 384]
 		'''
+	print('\t scope: full1')
+	print('\t\t ')
 
 	# Second Fully Connected Layer
 	with tf.variable_scope('full2') as scope:
@@ -777,7 +787,30 @@ for i in range(generations):
 		[temp_accuracy] = sess.run([accuracy])
 		test_accuracy.append(temp_accuracy)
 		acc_output = ' --- Test Accuracy = {:.2f}%.'.format(100.*temp_accuracy)
-		print(accur)
+		print(acc_output)
+
+
+# Print loss and accuracy
+# Matlotlib code to plot the loss and accuracies
+eval_indices = range(0, generations, eval_every)
+output_indices = range(0, generations, output_every)
+
+plt.figure(figsize=(12, 5))
+plt.subplot(121)
+# Plot loss over time
+plt.plot(output_indices, train_loss, 'k-')
+plt.title('Softmax Loss per Generation')
+plt.xlabel('Generation')
+plt.ylabel('Softmax Loss')
+#plt.show()
+
+plt.subplot(122)
+# Plot accuracy over time
+plt.plot(eval_indices, test_accuracy, 'k-')
+plt.title('Test Accuracy')
+plt.xlabel('Generation')
+plt.ylabel('Accuracy')
+plt.show()
 
 
 
