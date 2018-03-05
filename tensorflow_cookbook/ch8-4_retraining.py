@@ -15,7 +15,14 @@ from __future__ import print_function
 # The end purpose of the files is for retrianing the
 # Google Inception tensorflow model to work on the CIFAR-10.
 
+import os
+import tarfile
+import _pickle as cPickle
+import urllib.request
+import scipy.misc
+import numpy as np 
 
 
+cifar_link = 'https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz'
 
 
