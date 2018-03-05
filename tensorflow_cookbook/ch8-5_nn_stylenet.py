@@ -440,7 +440,7 @@ AttributeError: 'module' object has no attribute 'load'
 def vgg_network(network_weights, init_image):
 	network = {}
 	image = init_image
-	print("init_image\t", image)
+	#print("init_image\t", image)
 
 	for i, layer in enumerate(vgg_layers):
 		#if layer[1] == 'c':
@@ -450,16 +450,16 @@ def vgg_network(network_weights, init_image):
 			bias    = bias.reshape(-1)
 			conv_layer = tf.nn.conv2d(image, tf.constant(weights), (1, 1, 1, 1), 'SAME')
 			image = tf.nn.bias_add(conv_layer, bias)
-			print('\t c:\t', weights.shape, bias.shape, conv_layer, image)
+			#print('\t c:\t', weights.shape, bias.shape, conv_layer, image)
 		#elif layer[1] == 'r':
 		elif layer[0] == 'r':
 			image = tf.nn.relu(image)
-			print('\t r \t', image)
+			#print('\t r \t', image)
 		else:
 			image = tf.nn.max_pool(image, (1, 2, 2, 1), (1, 2, 2, 1), 'SAME')
-			print('\t e \t', image)
+			#print('\t e \t', image)
 		network[layer] = image
-		print("i=", i, 'layer=', layer, 'image=', image)
+		#print("i=", i, 'layer=', layer, 'image=', image)
 	return(network)
 
 
@@ -478,8 +478,6 @@ style_features    = {}
 # Get network parameter
 image = tf.placeholder('float', shape=shape)
 vgg_net = vgg_network(network_weights, image)
-
-
 
 
 
@@ -552,6 +550,48 @@ i= 33 layer= relu5_3 	image= Tensor("Relu_14:0", 		shape=(1, 21, 29, 512), dtype
 i= 34 layer= conv5_4 	image= Tensor("BiasAdd_15:0", 	shape=(1, 21, 29, 512), dtype=float32)
 i= 35 layer= relu5_4 	image= Tensor("Relu_15:0", 		shape=(1, 21, 29, 512), dtype=float32)
 [Finished in 76.3s]
+
+
+
+
+init_image (1, 326, 458, 3)
+ 0, 'conv1_1')  [1, out_h,out_w, 3*3*3]x[3*3*3, 64] 	-> [1, ceil(326/1), ceil(458/1), 64]  -> [1, 326, 458, 64]
+ 1, 'relu1_1')  																				 [1, 326, 458, 64]
+ 2, 'conv1_2')  [1, out_h,out_w, 3*3*64]x[3*3*64, 64] 	-> [1, ceil(326/1), ceil(458/1), 64]  -> [1, 326, 458, 64]
+ 3, 'relu1_2')  																				 [1, 326, 458, 64]
+ 4, 'pool1'  )  [1, ceil(326/2), ceil(458/2), 64] 											  -> [1, 163, 229, 64]
+ 5, 'conv2_1')  [1, out_h,out_w, ...]x[3*3*64, 128] 	-> [1, ceil(163/1), ceil(229/1), 128] -> [1, 163, 229, 128]
+ 6, 'relu2_1')  																				 [1, 163, 229, 128]
+ 7, 'conv2_2')  [1, out_h,out_w, ...]x[3*3*128, 128] 	-> [1, ceil(163/1), ceil(229/1), 128] -> [1, 163, 229, 128]
+ 8, 'relu2_2')  																				 [1, 163, 229, 128]
+ 9, 'pool2'  )  [1, ceil(163/2), ceil(229/2), 128] 											  -> [1, 82, 115, 128]
+10, 'conv3_1')  [1, ceil(82/1), ceil(115/1), ...]x[3*3*128, 256] 	-> [1, 82, 115, 256]
+11, 'relu3_1')  													   [1, 82, 115, 256]
+12, 'conv3_2')  [1, ceil(82/1), ceil(115/1), ...]x[3*3*256, 256] 	-> [1, 82, 115, 256]
+13, 'relu3_2')  													   [1, 82, 115, 256]
+14, 'conv3_3')  [1, ceil(82/1), ceil(115/1), ...]x[3*3*256, 256] 	-> [1, 82, 115, 256]
+15, 'relu3_3')  													   [1, 82, 115, 256]
+16, 'conv3_4')  [1, ceil(82/1), ceil(115/1), ...]x[3*3*256, 256] 	-> [1, 82, 115, 256]
+17, 'relu3_4')  
+18, 'pool3'  )  [1, ceil(82/2), ceil(115/2), 256] 					-> [1, 41, 56, 256]
+19, 'conv4_1')  [1, ceil(41/1), ceil(56/1), ...]x[3*3*256, 512] 	-> [1, 41, 56, 512]
+20, 'relu4_1')  
+21, 'conv4_2')  [1, ceil(41/1), ceil(56/1), ...]x[3*3*512, 512] 	-> [1, 41, 56, 512]
+22, 'relu4_2')  
+23, 'conv4_3')  [1, ceil(41/1), ceil(56/1), ...]x[3*3*512, 512] 	-> [1, 41, 56, 512]
+24, 'relu4_3')  
+25, 'conv4_4')  [1, ceil(41/1), ceil(56/1), ...]x[3*3*512, 512] 	-> [1, 41, 56, 512]
+26, 'relu4_4')  
+27, 'pool4'  )  [1, ceil(41/2), ceil(56/2), 512] 					-> [1, 21, 28, 512]
+28, 'conv5_1')  [1, ceil(21/1), ceil(28/1), ...]x[3*3*512, 512] 	-> [1, 21, 28, 512]
+29, 'relu5_1')  
+30, 'conv5_2')  [1, ceil(21/1), ceil(28/1), ...]x[3*3*512, 512] 	-> [1, 21, 28, 512]
+31, 'relu5_2')  
+32, 'conv5_3')  [1, ceil(21/1), ceil(28/1), ...]x[3*3*512, 512] 	-> [1, 21, 28, 512]
+33, 'relu5_3')  
+34, 'conv5_4')  [1, ceil(21/1), ceil(28/1), ...]x[3*3*512, 512] 	-> [1, 21, 28, 512]
+35, 'relu5_4')  
+
 
 
 
@@ -664,12 +704,115 @@ i= 34 layer= conv5_4 image=  Tensor("BiasAdd_15:0", shape=(1, 21, 29, 512), dtyp
 i= 35 layer= relu5_4 image=  Tensor("Relu_15:0", 	shape=(1, 21, 29, 512), dtype=float32)
 [Finished in 41.7s]
 
+'''
+
+
+
+# Normalize original image
+original_minus_mean = original_image - normalization_mean
+original_norm       = np.array([original_minus_mean])
+original_features[original_layer] = sess.run(vgg_net[original_layer], feed_dict={image: original_norm})
+
+# Get style image network
+image = tf.placeholder('float', shape=style_shape)
+vgg_net = vgg_network(network_weights, image)
+style_minus_mean = style_image - normalization_mean
+style_norm = np.array([style_minus_mean])
+
+for layer in style_layers:
+	layer_output = sess.run(vgg_net[layer], feed_dict={image: style_norm})
+	layer_output = np.reshape(layer_output, (-1, layer_output.shape[3]))
+	style_gram_matrix = np.matmul(layer_output.T, layer_output) / layer_output.size 
+	style_features[layer] = style_gram_matrix
+
+# Make Combined Image
+initial = tf.random_normal(shape) * 0.05
+image   = tf.Variable(initial)
+vgg_net = vgg_network(network_weights, image)
+
+
+
+'''
+>>> normalization_mean = mat_mean 	#[3,]
+>>> original_image 					#[326,458,3]
+>>> original_minus_mean 			#[326,458,3]
+>>> original_norm 					#[1,326,458,3]
+
+>>> style_image 					#[362,458,3]
+>>> style_minus_mean 				#[362,458,3]
+>>> style_norm 						#[1,362,458,3]
 
 '''
 
 
 
+# Loss
+original_loss = original_image_weight * (2 * tf.nn.l2_loss(vgg_net[original_layer] - original_features[original_layer]) / original_features[original_layer].size)
 
+# Loss from Style Image
+style_loss = 0
+style_losses = []
+for style_layer in style_layers:
+	layer = vgg_net[style_layer]
+	feats, height, width, channels = [x.value  for x in layer.get_shape()]
+	size  = height * width * channels
+	features = tf.reshape(layer, (-1, channels))
+	style_gram_matrix = tf.matmul(tf.transpose(features), features) / size
+	style_expected    = style_features[style_layer]
+	style_losses.append(2 * tf.nn.l2_loss(style_gram_matrix - style_expected) / style_expected.size)
+style_loss += style_image_weight * tf.reduce_sum(style_losses)
+
+# To Smooth the results, we add in total variation loss
+total_var_x = sess.run(tf.reduce_prod(image[:, 1:, :, :].get_shape()))
+total_var_y = sess.run(tf.reduce_prod(image[:, :, 1:, :].get_shape()))
+first_term  = regularization_weight * 2
+second_term_numerator = tf.nn.l2_loss(image[:, 1:, :, :] - image[:, :shape[1]-1, :, :])
+second_term = second_term_numerator / total_var_y
+third_term  = (tf.nn.l2_loss(image[:, :, 1:, :] - image[:, :, :shape[2]-1, :]) / total_var_x)
+total_variation_loss = first_term * (second_term + third_term)
+
+# Combined Loss
+loss = original_loss + style_loss + total_variation_loss
+
+
+
+
+# Declare Optimization Algorithm
+optimizer = tf.train.GradientDescentOptimizer(learning_rate)
+train_step = optimizer.minimize(loss)
+
+# Initialize Variables and start Training
+sess.run(tf.global_variables_initializer())
+
+
+# Declare Optimization Algorithm
+optimizer = tf.train.GradientDescentOptimizer(learning_rate)
+train_step = optimizer.minimize(loss)
+# Initialize Variables and start Training
+sess.run(tf.global_variables_initializer())
+for i in range(generations):
+	sess.run(train_step)
+
+	# Print update and save temporary output
+	if (i+1) % output_generations == 0:
+		print('Generation {} out of {}'.format(i+1, generations))
+		image_eval = sess.run(image)
+		best_image_add_mean = image_eval.reshape(shape[1:]) + normalization_mean
+		output_file = 'temp_output_{}.jpg'.format(i)
+		misc.imsave(output_file, best_image_add_mean)
+
+
+
+
+'''
+2018-03-05 21:12:03.169250: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX
+terminate called after throwing an instance of 'std::bad_alloc'
+  what():  std::bad_alloc
+[Finished in 164.8s with exit code -6]
+[shell_cmd: python -u "/home/ubuntu/Program/Code/tensorflow_cookbook/ch8-5_nn_stylenet.py"]
+[dir: /home/ubuntu/Program/Code/tensorflow_cookbook]
+[path: /home/ubuntu/bin:/home/ubuntu/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin]
+'''
 
 
 
