@@ -2,7 +2,7 @@
 
 Some codes to learn TensorFlow are stored here.
 
-Environment
+Environment:
 - Python 2.7
   - matplotlib (2.0.2)
   - numpy (1.13.3)
