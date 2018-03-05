@@ -50,10 +50,13 @@ sess = tf.Session()
 
 # Set model parameters
 batch_size   = 128
-data_dir     = ''   ##'temp'
-output_every = 100  ##50
-generations  = 2000 ##20000
-eval_every   = 50   ##500
+data_dir     = '/home/ubuntu/Program/datasets' #''   ##'temp'
+#output_every = 10 #100  ##50
+#generations  = 200 #2000 ##20000
+#eval_every   = 20   ##500
+generations = 20000
+output_every= 50
+eval_every  = 500
 image_height = 32
 image_width  = 32
 crop_height  = 24
@@ -446,6 +449,9 @@ def cifar_cnn_model(input_images, batch_size, train_logical=True):
 	def zero_var(name, shape, dtype):
 		return(tf.get_variable(name=name, shape=shape, dtype=dtype, initializer=tf.constant_initializer(0.0)))
 
+	print('def cifar_cnn_model:')
+	print('\t input: \t', input_images.name, '\t batch_size=',batch_size, 'train_logical=',train_logical)
+
 	# First Convolutional Layer
 	with tf.variable_scope('conv1') as scope:
 		# Conv_kernel is 5x5 for all 3 colors and we will create 64 features
@@ -475,9 +481,8 @@ def cifar_cnn_model(input_images, batch_size, train_logical=True):
 				(5) relu_conv1 		->  [batch_size, out_h1, out_w1, 64]
 				(iii) 	output:	[batch_size, out_h1, out_w1, 64]	->	[batch_size, 24,24,64]
 		'''
-	print('def cifar_cnn_model:')
 	print('\t scope: conv1')
-	print('\t\t', conv1_kernel.name, '\n\t\t', conv1_bias.name, '\n\t\t', conv1.name, conv1_add_bias.name, relu_conv1.name)
+	print('\t\t', conv1_kernel.name, '\t\t', conv1_bias.name, '\n\t\t', conv1.name, '\t\t', conv1_add_bias.name, '\n\t\t', relu_conv1.name)
 
 	# Max Pooling
 	pool1 = tf.nn.max_pool(relu_conv1, ksize=[1,3,3,1], strides=[1,2,2,1], padding='SAME', name='pool_layer1')
@@ -531,7 +536,7 @@ def cifar_cnn_model(input_images, batch_size, train_logical=True):
 				(iii) 	output:	[batch_size, out_h2, out_w2, 64] 	->  [batch_size, 12,12,64]
 		'''
 	print('\t scope: conv2')
-	print('\t\t', conv2_kernel.name, '\n\t\t', conv2_bias.name, '\n\t\t', conv2.name, conv2_add_bias.name, relu_conv2.name)
+	print('\t\t', conv2_kernel.name, '\t\t', conv2_bias.name, '\n\t\t', conv2.name, '\t\t', conv2_add_bias.name, '\n\t\t', relu_conv2.name)
 
 	# Max Pooling
 	pool2 = tf.nn.max_pool(relu_conv2, ksize=[1,3,3,1], strides=[1,2,2,1], padding='SAME', name='pool_layer2')
@@ -564,7 +569,7 @@ def cifar_cnn_model(input_images, batch_size, train_logical=True):
 		reshape_dim     #a number
 				(2) 	output: new_h2 * new_w2 * 64 				->  6*6*64 = 2304
 	'''
-	print('\t reshape \t', reshape_output.name, reshape_dim.name)
+	print('\t reshape \t', reshape_output.name, reshape_dim)
 
 	# First Fully Connected Layer
 	with tf.variable_scope('full1') as scope:
@@ -582,7 +587,7 @@ def cifar_cnn_model(input_images, batch_size, train_logical=True):
 				(3) tf.nn.relu(.) 								#[batch_size, 384]
 		'''
 	print('\t scope: full1')
-	print('\t\t ')
+	print('\t\t', full_weight1.name, full_bias1.name, '\t', full_layer1.name)
 
 	# Second Fully Connected Layer
 	with tf.variable_scope('full2') as scope:
@@ -599,6 +604,8 @@ def cifar_cnn_model(input_images, batch_size, train_logical=True):
 				(2) tf.add(., full_bias2) 						#[batch_size, 192]
 				(3) tf.nn.relu(.) 								#[batch_size, 192]
 		'''
+	print('\t scope: full2')
+	print('\t\t', full_weight2.name, full_bias2.name, '\t', full_layer2.name)
 
 	# Final Fully Connected Layer -> 10 categories for output (num_targets)
 	with tf.variable_scope('full3') as scope:
@@ -614,6 +621,8 @@ def cifar_cnn_model(input_images, batch_size, train_logical=True):
 				(1) tf.matmul(full_layer2, full_weight3) 		#[batch_size, num_targets]
 				(2) tf.add(., full_bias3) 						#[batch_size, num_targets]
 		'''
+	print('\t scope: full3')
+	print('\t\t', full_weight3.name, full_bias3.name, '\t', final_output.name)
 
 	return(final_output)  		#[batch_size, num_targets]
 
@@ -624,7 +633,7 @@ def cifar_loss(logits, targets):
 	# Get rid of extra dimensions and cast targets into integers
 	targets = tf.squeeze(tf.cast(targets, tf.int32))
 	# Calculate cross entropy from logits and targets
-	cross_entropy = tf.nn.sqarse_softmax_cross_entropy_with_logits(logits=logits, labels=targets)
+	cross_entropy = tf.nn.sparse_softmax_cross_entropy_with_logits(logits=logits, labels=targets)
 	# Take the average loss across batch size
 	cross_entropy_mean = tf.reduce_mean(cross_entropy, name='cross_entropy')
 	return(cross_entropy_mean)
@@ -811,6 +820,197 @@ plt.title('Test Accuracy')
 plt.xlabel('Generation')
 plt.ylabel('Accuracy')
 plt.show()
+
+
+
+
+'''
+2018-03-05 10:22:59.697571: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX
+Getting/Transforming Data.
+train - images	 Tensor("shuffle_batch:0", shape=(128, 24, 24, 3), dtype=float32)
+train - labels	 Tensor("shuffle_batch:1", shape=(128, 1), 		   dtype=int32)
+test  - images	 Tensor("shuffle_batch:0", shape=(128, 24, 24, 3), dtype=float32)
+test  - labels	 Tensor("shuffle_batch:1", shape=(128, 1), 		   dtype=int32)
+Creating the CIFAR10 Model.
+def cifar_cnn_model:
+	 input: 	 shuffle_batch:0 batch_size 128 train_logical True
+	 scope: conv1
+		 model_definition/conv1/conv_kernel1:0 
+		 model_definition/conv1/conv_bias1:0 
+		 model_definition/conv1/Conv2D:0 model_definition/conv1/BiasAdd:0 model_definition/conv1/Relu:0
+		 * 	 model_definition/pool_layer1:0 model_definition/norm1:0
+	 scope: conv2
+		 model_definition/conv2/conv_kernel2:0 
+		 model_definition/conv2/conv_bias2:0 
+		 model_definition/conv2/Conv2D:0 model_definition/conv2/BiasAdd:0 model_definition/conv2/Relu:0
+		 * 	 model_definition/pool_layer2:0 model_definition/norm2:0
+	 reshape 	 model_definition/Reshape:0 2304
+	 scope: full1
+		 model_definition/full1/full_mult1:0 model_definition/full1/full_bias1:0 model_definition/full1/Relu:0
+	 scope: full2
+		 model_definition/full2/full_mult2:0 model_definition/full2/full_bias2:0 model_definition/full2/Relu:0
+	 scope: full3
+		 model_definition/full3/full_mult3:0 model_definition/full3/full_bias3:0 model_definition/full3/Add:0
+def cifar_cnn_model:
+	 input: 	 shuffle_batch_1:0 batch_size 128 train_logical True
+	 scope: conv1
+		 model_definition/conv1/conv_kernel1:0 
+		 model_definition/conv1/conv_bias1:0 
+		 model_definition/conv1_1/Conv2D:0 model_definition/conv1_1/BiasAdd:0 model_definition/conv1_1/Relu:0
+		 * 	 model_definition/pool_layer1_1:0 model_definition/norm1_1:0
+	 scope: conv2
+		 model_definition/conv2/conv_kernel2:0 
+		 model_definition/conv2/conv_bias2:0 
+		 model_definition/conv2_1/Conv2D:0 model_definition/conv2_1/BiasAdd:0 model_definition/conv2_1/Relu:0
+		 * 	 model_definition/pool_layer2_1:0 model_definition/norm2_1:0
+	 reshape 	 model_definition/Reshape_1:0 2304
+	 scope: full1
+		 model_definition/full1/full_mult1:0 model_definition/full1/full_bias1:0 model_definition/full1_1/Relu:0
+	 scope: full2
+		 model_definition/full2/full_mult2:0 model_definition/full2/full_bias2:0 model_definition/full2_1/Relu:0
+	 scope: full3
+		 model_definition/full3/full_mult3:0 model_definition/full3/full_bias3:0 model_definition/full3_1/Add:0
+Declare Loss Function.
+Creating the Training Operation.
+Initializing the Variables.
+Starting Training
+Generation 50: Loss = 1.91048 		 --- Test Accuracy = 26.56%.
+Generation 100: Loss = 1.91404 		 --- Test Accuracy = 35.94%.
+Generation 150: Loss = 1.77330 		 --- Test Accuracy = 37.50%.
+Generation 200: Loss = 1.63957 		 --- Test Accuracy = 30.47%.
+[Finished in 292.3s]
+
+
+
+2018-03-05 10:33:37.926565: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX
+Getting/Transforming Data.
+train - images	 Tensor("shuffle_batch:0", shape=(128, 24, 24, 3), dtype=float32)
+train - labels	 Tensor("shuffle_batch:1", shape=(128, 1		), dtype=int32 	)
+test  - images	 Tensor("shuffle_batch:0", shape=(128, 24, 24, 3), dtype=float32)
+test  - labels	 Tensor("shuffle_batch:1", shape=(128, 1		), dtype=int32 	)
+Creating the CIFAR10 Model.
+def cifar_cnn_model:
+	 input: 	 shuffle_batch:0 	 batch_size= 128 train_logical= True
+	 scope: conv1
+		 model_definition/conv1/conv_kernel1:0 		 model_definition/conv1/conv_bias1:0 
+		 model_definition/conv1/Conv2D:0 			 model_definition/conv1/BiasAdd:0 
+		 model_definition/conv1/Relu:0
+		 * 	 model_definition/pool_layer1:0 model_definition/norm1:0
+	 scope: conv2
+		 model_definition/conv2/conv_kernel2:0 		 model_definition/conv2/conv_bias2:0 
+		 model_definition/conv2/Conv2D:0 			 model_definition/conv2/BiasAdd:0 
+		 model_definition/conv2/Relu:0
+		 * 	 model_definition/pool_layer2:0 model_definition/norm2:0
+	 reshape 	 model_definition/Reshape:0 2304
+	 scope: full1
+		 model_definition/full1/full_mult1:0 model_definition/full1/full_bias1:0 	 model_definition/full1/Relu:0
+	 scope: full2
+		 model_definition/full2/full_mult2:0 model_definition/full2/full_bias2:0 	 model_definition/full2/Relu:0
+	 scope: full3
+		 model_definition/full3/full_mult3:0 model_definition/full3/full_bias3:0 	 model_definition/full3/Add:0
+def cifar_cnn_model:
+	 input: 	 shuffle_batch_1:0 	 batch_size= 128 train_logical= True
+	 scope: conv1
+		 model_definition/conv1/conv_kernel1:0 		 model_definition/conv1/conv_bias1:0 
+		 model_definition/conv1_1/Conv2D:0 			 model_definition/conv1_1/BiasAdd:0 
+		 model_definition/conv1_1/Relu:0
+		 * 	 model_definition/pool_layer1_1:0 model_definition/norm1_1:0
+	 scope: conv2
+		 model_definition/conv2/conv_kernel2:0 		 model_definition/conv2/conv_bias2:0 
+		 model_definition/conv2_1/Conv2D:0 			 model_definition/conv2_1/BiasAdd:0 
+		 model_definition/conv2_1/Relu:0
+		 * 	 model_definition/pool_layer2_1:0 model_definition/norm2_1:0
+	 reshape 	 model_definition/Reshape_1:0 2304
+	 scope: full1
+		 model_definition/full1/full_mult1:0 model_definition/full1/full_bias1:0 	 model_definition/full1_1/Relu:0
+	 scope: full2
+		 model_definition/full2/full_mult2:0 model_definition/full2/full_bias2:0 	 model_definition/full2_1/Relu:0
+	 scope: full3
+		 model_definition/full3/full_mult3:0 model_definition/full3/full_bias3:0 	 model_definition/full3_1/Add:0
+Declare Loss Function.
+Creating the Training Operation.
+Initializing the Variables.
+Starting Training
+	Generation  10: Loss = 2.25994 		Generation  20: Loss = 2.12781 		 --- Test Accuracy = 24.22%.
+	Generation  30: Loss = 2.09021 		Generation  40: Loss = 2.20211 		 --- Test Accuracy = 20.31%.
+	Generation  50: Loss = 1.93472 		Generation  60: Loss = 2.03882 		 --- Test Accuracy = 29.69%.
+	Generation  70: Loss = 2.19743 		Generation  80: Loss = 1.98504 		 --- Test Accuracy = 27.34%.
+	Generation  90: Loss = 1.86038 		Generation 100: Loss = 2.01970 		 --- Test Accuracy = 35.94%.
+	Generation 110: Loss = 1.78011 		Generation 120: Loss = 1.88360 		 --- Test Accuracy = 36.72%.
+	Generation 130: Loss = 1.80376 		Generation 140: Loss = 1.88101 		 --- Test Accuracy = 41.41%.
+	Generation 150: Loss = 1.80828 		Generation 160: Loss = 1.81814 		 --- Test Accuracy = 39.06%.
+	Generation 170: Loss = 1.78327 		Generation 180: Loss = 1.57441 		 --- Test Accuracy = 37.50%.
+	Generation 190: Loss = 1.77553 		Generation 200: Loss = 1.67395 		 --- Test Accuracy = 42.19%.
+[Finished in 293.9s]
+
+
+
+
+2018-03-05 10:43:32.567107: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX
+Getting/Transforming Data.
+train - images	 Tensor("shuffle_batch:0", shape=(128, 24, 24, 3), dtype=float32)
+train - labels	 Tensor("shuffle_batch:1", shape=(128, 1), dtype=int32)
+test  - images	 Tensor("shuffle_batch:0", shape=(128, 24, 24, 3), dtype=float32)
+test  - labels	 Tensor("shuffle_batch:1", shape=(128, 1), dtype=int32)
+Creating the CIFAR10 Model.
+def cifar_cnn_model:
+	 input: 	 shuffle_batch:0 	 batch_size= 128 train_logical= True
+	 scope: conv1
+		 model_definition/conv1/conv_kernel1:0 		 model_definition/conv1/conv_bias1:0 
+		 model_definition/conv1/Conv2D:0 		 model_definition/conv1/BiasAdd:0 
+		 model_definition/conv1/Relu:0
+		 * 	 model_definition/pool_layer1:0 model_definition/norm1:0
+	 scope: conv2
+		 model_definition/conv2/conv_kernel2:0 		 model_definition/conv2/conv_bias2:0 
+		 model_definition/conv2/Conv2D:0 		 model_definition/conv2/BiasAdd:0 
+		 model_definition/conv2/Relu:0
+		 * 	 model_definition/pool_layer2:0 model_definition/norm2:0
+	 reshape 	 model_definition/Reshape:0 2304
+	 scope: full1
+		 model_definition/full1/full_mult1:0 model_definition/full1/full_bias1:0 	 model_definition/full1/Relu:0
+	 scope: full2
+		 model_definition/full2/full_mult2:0 model_definition/full2/full_bias2:0 	 model_definition/full2/Relu:0
+	 scope: full3
+		 model_definition/full3/full_mult3:0 model_definition/full3/full_bias3:0 	 model_definition/full3/Add:0
+def cifar_cnn_model:
+	 input: 	 shuffle_batch_1:0 	 batch_size= 128 train_logical= True
+	 scope: conv1
+		 model_definition/conv1/conv_kernel1:0 		 model_definition/conv1/conv_bias1:0 
+		 model_definition/conv1_1/Conv2D:0 		 model_definition/conv1_1/BiasAdd:0 
+		 model_definition/conv1_1/Relu:0
+		 * 	 model_definition/pool_layer1_1:0 model_definition/norm1_1:0
+	 scope: conv2
+		 model_definition/conv2/conv_kernel2:0 		 model_definition/conv2/conv_bias2:0 
+		 model_definition/conv2_1/Conv2D:0 		 model_definition/conv2_1/BiasAdd:0 
+		 model_definition/conv2_1/Relu:0
+		 * 	 model_definition/pool_layer2_1:0 model_definition/norm2_1:0
+	 reshape 	 model_definition/Reshape_1:0 2304
+	 scope: full1
+		 model_definition/full1/full_mult1:0 model_definition/full1/full_bias1:0 	 model_definition/full1_1/Relu:0
+	 scope: full2
+		 model_definition/full2/full_mult2:0 model_definition/full2/full_bias2:0 	 model_definition/full2_1/Relu:0
+	 scope: full3
+		 model_definition/full3/full_mult3:0 model_definition/full3/full_bias3:0 	 model_definition/full3_1/Add:0
+Declare Loss Function.
+Creating the Training Operation.
+Initializing the Variables.
+Starting Training
+Generation  50: Loss = 2.00711
+Generation 100: Loss = 1.82084
+Generation 150: Loss = 1.80239
+Generation 200: Loss = 1.66121
+Generation 250: Loss = 1.63979
+Generation 300: Loss = 1.64908
+Generation 350: Loss = 1.50471
+Generation 400: Loss = 1.53695
+Generation 450: Loss = 1.60325
+Generation 500: Loss = 1.61382
+ --- Test Accuracy = 41.41%.
+[Cancelled]
+
+
+'''
+
 
 
 
