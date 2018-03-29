@@ -245,8 +245,8 @@ y_output = tf.placeholder(tf.int32, [None]) 												#[None, ]
 
 # Create embedding
 embedding_mat    = tf.Variable(tf.random_uniform([vocab_size, embedding_size], -1.0, 1.0)) 	#[vocab_size, embedding_size], [933,50]
-embedding_output = tf.nn.embedding_lookup(embedding_mat, x_data)
-#embedding_output_expanded = tf.expand_dims(embedding_output, -1)
+embedding_output = tf.nn.embedding_lookup(embedding_mat, x_data) 		   #[None,max_sequence_length,embedding_size], [None,25,50]
+#embedding_output_expanded = tf.expand_dims(embedding_output, -1) 	   #[None,max_sequence_length,embedding_size,1], [None,25,50,1]
 
 '''
 >>> import tensorflow as tf
@@ -282,12 +282,228 @@ if tf.__version__[0] >= '1':
 else:
 	cell = tf.nn.rnn_cell.BasicRNNCell(num_units = rnn_size)
 
-output, state = tf.nn.dynamic_rnn(cell, embedding_output, dtype=tf.float32)
-output = tf.nn.dropout(output, dropout_keep_prob)
+output, state = tf.nn.dynamic_rnn(cell, embedding_output, dtype=tf.float32) 
+#													output: 		[None,max_sequence_length,rnn_size], [?,25,10]
+#													last_states:	[None, rnn_size], [?,10]
+output = tf.nn.dropout(output, dropout_keep_prob) 	# 				[None,max_sequence_length,rnn_size], [?,25,10]
+
+
+# Get output of RNN sequence
+output = tf.transpose(output, [1, 0, 2]) 						  # [max_sequence_length,None,rnn_size], [25,?,10]
+last   = tf.gather(output, int(output.get_shape()[0]) - 1) 		  # [None, rnn_size], [?,10]
+
+
+weight = tf.Variable(tf.truncated_normal([rnn_size, 2], stddev=0.1)) 	#[rnn_size,2], [10,2]
+bias   = tf.Variable(tf.constant(0.1, shape=[2])) 						#[2,]
+logits_out = tf.matmul(last, weight) + bias 							#[None,2]
+
+
+# Loss function
+losses = tf.nn.sparse_softmax_cross_entropy_with_logits(logits=logits_out, labels=y_output) # logits=float32, labels=int32
+#									#[None,]
+loss   = tf.reduce_mean(losses) 	#a scalar
+'''
+logits_out :	[None,2]
+y_output   :	[None,]
+	labels_y :		[None,2]
+	
+	predicts=tf.nn.softmax(logits=logits_out, dim=-1) :	[None,2]
+	labels  =tf.clip_by_value(labels_y, 1e-10, 1.0)   :	[None,2]
+	predicts=tf.clip_by_value(predicts, 1e-10, 1.0)   :	[None,2]
+	cross_entropy = tf.reduce_sum(labels * tf.log(labels/predicts), axis=1)
+		labels / predicts 	:	[None,2]
+		tf.log(.) 			:	[None,2]
+		labels*. 			:	[None,2]
+		tf.reduce_sum(., 1) :	[None,]
+'''
+
+
+accuracy = tf.reduce_mean(tf.cast(tf.equal(tf.argmax(logits_out, 1), tf.cast(y_output, tf.int64)), tf.float32)) #scalar, tf.float32
+'''
+logits_out 	:	[None,2], tf.float32
+y_output 	:	[None,] , tf.int32
+
+	tf.argmax(logits_out, axis=1) 		:	[None,], tf.int64
+	tf.cast(y_output, dtype=tf.int64) 	:	[None,], tf.int64
+		tf.equal(., .) 						: 	[None,], tf.bool
+			tf.cast(., dtype=tf.float32) 	:		[None,], tf.float32
+				tf.reduce_mean(.) 			: 			a scalar, tf.float32
+'''
+
+
+optimizer  = tf.train.RMSPropOptimizer(learning_rate) 	#learning_rate=0.0005
+train_step = optimizer.minimize(loss)
+
+init = tf.global_variables_initializer()
+sess.run(init)
+
+train_loss = []
+test_loss  = []
+train_accuracy = []
+test_accuracy  = []
+# Start training
+for epoch in range(epochs): #20
+	
+	# Shuffle training data
+	shuffled_ix = np.random.permutation(np.arange(len(x_train)))
+	x_train = x_train[shuffled_ix]
+	y_train = y_train[shuffled_ix]
+	'''
+	x_trn: (4459, 25)
+	x_tst: (1115, 25)
+	'''
+	num_batches = int(len(x_train) / batch_size) + 1 
+	'''
+	batch_size = 250
+	int(4459/250.)+1 = int(17.836)+1 = 17+1 = 18
+	'''
+
+	# TO DO Calculate Generations ExACTLY (exactly)
+	for i in range(num_batches):
+		# Select train data
+		min_ix = i * batch_size
+		max_ix = np.min([len(x_train), ((i+1) * batch_size)])
+		x_train_batch = x_train[min_ix : max_ix]
+		y_train_batch = y_train[min_ix : max_ix]
+
+		# Run train step
+		train_dict = {x_data: x_train_batch, y_output: y_train_batch, dropout_keep_prob: 0.5}
+		sess.run(train_step, feed_dict=train_dict)
+
+	# Run loss and accuracy for training
+	temp_train_loss, temp_train_acc = sess.run([loss, accuracy], feed_dict=train_dict)
+	train_loss.append(temp_train_loss)
+	train_accuracy.append(temp_train_acc)
+
+	# Run Eval Step
+	test_dict = {x_data: x_test, y_output: y_test, dropout_keep_prob: 1.0}
+	temp_test_loss , temp_test_acc  = sess.run([loss, accuracy], feed_dict=test_dict )
+	test_loss.append( temp_test_loss )
+	test_accuracy.append( temp_test_acc )
+
+	#print('Epoch: {}, Test Loss: {:.2}, Test Acc: {:.2}'.format(epoch+1, temp_test_loss, temp_test_acc))
+	print("Epoch {}: Train loss {:.4}, acc {:.4}. Test loss {:.4}, acc {:.4}.".format(epoch+1, temp_train_loss, temp_train_acc, temp_test_loss, temp_test_acc))
+
+
+plt.figure(figsize=(12, 5))
+plt.subplot(121)
+
+# Plot loss over time
+epoch_seq = np.arange(1, epochs+1)
+plt.plot(epoch_seq, train_loss, 'k--', label='Train Set')
+plt.plot(epoch_seq, test_loss , 'r-' , label='Test Set' )
+plt.title('Softmax Loss')
+plt.xlabel('Epochs')
+plt.ylabel('Softmax Loss')
+#plt.legend(loc='upper left')
+#plt.show()
+
+plt.legend(loc='upper right')
+plt.subplot(122)
+
+# Plot accuracy over time
+plt.plot(epoch_seq, train_accuracy, 'k--', label='Train Set')
+plt.plot(epoch_seq, test_accuracy , 'r-' , label='Test Set' )
+plt.title('Test Accuracy')
+plt.xlabel('Epochs')
+plt.ylabel('Accuracy')
+#plt.legend(loc='upper left')
+#plt.show()
+
+plt.legend(loc='lower right')
+exe_this_time = 3 #2 #1 	#this_time
+plt.savefig("ch9-2_fig{}.png".format(exe_this_time))
 
 
 
 
+'''
+2018-03-29 18:18:04.308847: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX
+True
+Vocabulary Size       : 933
+80-20 Train Test split: 4459 -- 1115
+/usr/local/lib/python2.7/dist-packages/tensorflow/python/ops/gradients_impl.py:96: UserWarning: Converting sparse IndexedSlices to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  "Converting sparse IndexedSlices to a dense Tensor of unknown shape. "
+Epoch  1: Train loss 0.6608, acc 0.6794. Test loss 0.6491, acc 0.8251.
+Epoch  2: Train loss 0.6302, acc 0.7464. Test loss 0.623 , acc 0.8296.
+Epoch  3: Train loss 0.597 , acc 0.7703. Test loss 0.5874, acc 0.8296.
+Epoch  4: Train loss 0.5596, acc 0.823 . Test loss 0.5465, acc 0.8287.
+Epoch  5: Train loss 0.4899, acc 0.8565. Test loss 0.5055, acc 0.8305.
+Epoch  6: Train loss 0.4655, acc 0.8421. Test loss 0.4724, acc 0.8359.
+Epoch  7: Train loss 0.4631, acc 0.8421. Test loss 0.4496, acc 0.8368.
+Epoch  8: Train loss 0.4876, acc 0.8182. Test loss 0.4328, acc 0.8404.
+Epoch  9: Train loss 0.4572, acc 0.8278. Test loss 0.4208, acc 0.8457.
+Epoch 10: Train loss 0.3484, acc 0.89  . Test loss 0.4124, acc 0.8484.
+Epoch 11: Train loss 0.4111, acc 0.8421. Test loss 0.4072, acc 0.8511.
+Epoch 12: Train loss 0.3829, acc 0.8708. Test loss 0.403 , acc 0.8565.
+Epoch 13: Train loss 0.4549, acc 0.8325. Test loss 0.3995, acc 0.8592.
+Epoch 14: Train loss 0.4826, acc 0.8469. Test loss 0.396 , acc 0.861 .
+Epoch 15: Train loss 0.4125, acc 0.8469. Test loss 0.3927, acc 0.8673.
+Epoch 16: Train loss 0.3205, acc 0.9091. Test loss 0.3895, acc 0.8682.
+Epoch 17: Train loss 0.433 , acc 0.866 . Test loss 0.386 , acc 0.87  .
+Epoch 18: Train loss 0.4096, acc 0.8517. Test loss 0.3824, acc 0.8709.
+Epoch 19: Train loss 0.4637, acc 0.8278. Test loss 0.3778, acc 0.8726.
+Epoch 20: Train loss 0.4111, acc 0.866 . Test loss 0.3716, acc 0.8735.
+[Finished in 24.5s]
+
+
+2018-03-29 18:23:45.485685: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX
+True
+Vocabulary Size       : 933
+80-20 Train Test split: 4459 -- 1115
+/usr/local/lib/python2.7/dist-packages/tensorflow/python/ops/gradients_impl.py:96: UserWarning: Converting sparse IndexedSlices to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  "Converting sparse IndexedSlices to a dense Tensor of unknown shape. "
+Epoch 1 : Train loss 0.7119, acc 0.4067. Test loss 0.7051, acc 0.1695.
+Epoch 2 : Train loss 0.6938, acc 0.555 . Test loss 0.6736, acc 0.8332.
+Epoch 3 : Train loss 0.6376, acc 0.6986. Test loss 0.6282, acc 0.8377.
+Epoch 4 : Train loss 0.5958, acc 0.7703. Test loss 0.5709, acc 0.843 .
+Epoch 5 : Train loss 0.4946, acc 0.8612. Test loss 0.5133, acc 0.843.
+Epoch 6 : Train loss 0.5176, acc 0.823 . Test loss 0.4696, acc 0.8439.
+Epoch 7 : Train loss 0.4622, acc 0.8565. Test loss 0.4354, acc 0.843 .
+Epoch 8 : Train loss 0.3973, acc 0.8756. Test loss 0.414 , acc 0.8448.
+Epoch 9 : Train loss 0.3803, acc 0.8565. Test loss 0.4014, acc 0.8466.
+Epoch 10: Train loss 0.4795, acc 0.8038. Test loss 0.3956, acc 0.8529.
+Epoch 11: Train loss 0.4007, acc 0.8469. Test loss 0.3913, acc 0.8547.
+Epoch 12: Train loss 0.4475, acc 0.8134. Test loss 0.3884, acc 0.8592.
+Epoch 13: Train loss 0.4161, acc 0.8421. Test loss 0.3858, acc 0.8619.
+Epoch 14: Train loss 0.3854, acc 0.8612. Test loss 0.3834, acc 0.8646.
+Epoch 15: Train loss 0.3723, acc 0.8756. Test loss 0.3814, acc 0.8691.
+Epoch 16: Train loss 0.3604, acc 0.8852. Test loss 0.3787, acc 0.8717.
+Epoch 17: Train loss 0.4295, acc 0.8708. Test loss 0.3764, acc 0.8726.
+Epoch 18: Train loss 0.4084, acc 0.866 . Test loss 0.3742, acc 0.8735.
+Epoch 19: Train loss 0.3791, acc 0.8612. Test loss 0.3707, acc 0.8735.
+Epoch 20: Train loss 0.4245, acc 0.8325. Test loss 0.3667, acc 0.8735.
+[Finished in 23.0s]
+
+
+2018-03-29 18:30:49.012963: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX
+True
+Vocabulary Size       : 933
+80-20 Train Test split: 4459 -- 1115
+/usr/local/lib/python2.7/dist-packages/tensorflow/python/ops/gradients_impl.py:96: UserWarning: Converting sparse IndexedSlices to a dense Tensor of unknown shape. This may consume a large amount of memory.
+  "Converting sparse IndexedSlices to a dense Tensor of unknown shape. "
+Epoch 1 : Train loss 0.622 , acc 0.7177. Test loss 0.5968, acc 0.8287.
+Epoch 2 : Train loss 0.5942, acc 0.7703. Test loss 0.5763, acc 0.8314.
+Epoch 3 : Train loss 0.5423, acc 0.8517. Test loss 0.5486, acc 0.8332.
+Epoch 4 : Train loss 0.525 , acc 0.8325. Test loss 0.5162, acc 0.8314.
+Epoch 5 : Train loss 0.504 , acc 0.8182. Test loss 0.4809, acc 0.8395.
+Epoch 6 : Train loss 0.463 , acc 0.8421. Test loss 0.4524, acc 0.843 .
+Epoch 7 : Train loss 0.464 , acc 0.823 . Test loss 0.4314, acc 0.8466.
+Epoch 8 : Train loss 0.4329, acc 0.8517. Test loss 0.4176, acc 0.8493.
+Epoch 9 : Train loss 0.4168, acc 0.8421. Test loss 0.4084, acc 0.8484.
+Epoch 10: Train loss 0.3922, acc 0.8708. Test loss 0.4021, acc 0.8529.
+Epoch 11: Train loss 0.4039, acc 0.8852. Test loss 0.397 , acc 0.8592.
+Epoch 12: Train loss 0.3642, acc 0.866 . Test loss 0.3926, acc 0.8619.
+Epoch 13: Train loss 0.4192, acc 0.8469. Test loss 0.3886, acc 0.8646.
+Epoch 14: Train loss 0.4587, acc 0.8469. Test loss 0.3845, acc 0.8682.
+Epoch 15: Train loss 0.3636, acc 0.8804. Test loss 0.3802, acc 0.8717.
+Epoch 16: Train loss 0.4249, acc 0.8517. Test loss 0.3753, acc 0.8726.
+Epoch 17: Train loss 0.3839, acc 0.866 . Test loss 0.3673, acc 0.8735.
+Epoch 18: Train loss 0.4041, acc 0.8373. Test loss 0.3509, acc 0.8744.
+Epoch 19: Train loss 0.3489, acc 0.8565. Test loss 0.3186, acc 0.8807.
+Epoch 20: Train loss 0.3405, acc 0.89  . Test loss 0.2872, acc 0.8888.
+[Finished in 22.7s]
+'''
 
 
 
