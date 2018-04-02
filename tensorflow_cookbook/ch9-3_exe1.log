@@ -1,0 +1,132 @@
+(py35env) byj@ubri07:~$ deactivate
+byj@ubri07:~$ source software/myvenv/bin/activate
+(myvenv) byj@ubri07:~$ cd temporal
+(myvenv) byj@ubri07:~/temporal$ python ch9-3_rnn_lstm.py
+Traceback (most recent call last):
+  File "ch9-3_rnn_lstm.py", line 11, in <module>
+    import requests
+ImportError: No module named requests
+(myvenv) byj@ubri07:~/temporal$ pip install requests
+Collecting requests
+  Downloading requests-2.18.4-py2.py3-none-any.whl (88kB)
+    100% |████████████████████████████████| 92kB 598kB/s
+Collecting urllib3<1.23,>=1.21.1 (from requests)
+  Downloading urllib3-1.22-py2.py3-none-any.whl (132kB)
+    100% |████████████████████████████████| 133kB 1.2MB/s
+Collecting idna<2.7,>=2.5 (from requests)
+  Downloading idna-2.6-py2.py3-none-any.whl (56kB)
+    100% |████████████████████████████████| 61kB 2.6MB/s
+Collecting chardet<3.1.0,>=3.0.2 (from requests)
+  Downloading chardet-3.0.4-py2.py3-none-any.whl (133kB)
+    100% |████████████████████████████████| 143kB 4.0MB/s
+Collecting certifi>=2017.4.17 (from requests)
+  Downloading certifi-2018.1.18-py2.py3-none-any.whl (151kB)
+    100% |████████████████████████████████| 153kB 1.4MB/s
+Installing collected packages: urllib3, idna, chardet, certifi, requests
+Successfully installed certifi-2018.1.18 chardet-3.0.4 idna-2.6 requests-2.18.4 urllib3-1.22
+(myvenv) byj@ubri07:~/temporal$ python ch9-3_rnn_lstm.py
+2018-04-02 12:26:49.574877: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+2018-04-02 12:26:50.040752: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1030] Found device 0 with properties:
+name: GeForce GTX 1080 Ti major: 6 minor: 1 memoryClockRate(GHz): 1.607
+pciBusID: 0000:03:00.0
+totalMemory: 10.91GiB freeMemory: 10.19GiB
+2018-04-02 12:26:50.478607: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1030] Found device 1 with properties:
+name: GeForce GTX 1080 Ti major: 6 minor: 1 memoryClockRate(GHz): 1.607
+pciBusID: 0000:81:00.0
+totalMemory: 10.91GiB freeMemory: 10.08GiB
+2018-04-02 12:26:50.478721: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Device peer to peer matrix
+2018-04-02 12:26:50.478781: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1051] DMA: 0 1
+2018-04-02 12:26:50.478799: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1061] 0:   Y N
+2018-04-02 12:26:50.478811: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1061] 1:   N Y
+2018-04-02 12:26:50.478832: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1120] Creating TensorFlow device (/device:GPU:0) -> (device: 0, name: GeForce GTX 1080 Ti, pci bus id: 0000:03:00.0, compute capability: 6.1)
+2018-04-02 12:26:50.478849: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1120] Creating TensorFlow device (/device:GPU:1) -> (device: 1, name: GeForce GTX 1080 Ti, pci bus id: 0000:81:00.0, compute capability: 6.1)
+Loading Shakespeare Data
+Cleaning Text
+Done loading/cleaning.
+Building Shakespeare Vocab
+Vocabulary Length = 9117
+Starting Epoch #1 of 10.
+        Iterations: 10, Epoch: 1, Batch: 10 out of 181, Loss: 9.947897
+        Iterations: 20, Epoch: 1, Batch: 20 out of 181, Loss: 9.504251
+        Iterations: 30, Epoch: 1, Batch: 30 out of 181, Loss: 8.993130
+        Iterations: 40, Epoch: 1, Batch: 40 out of 181, Loss: 8.450999
+        Iterations: 50, Epoch: 1, Batch: 50 out of 181, Loss: 8.708408
+                        Predict:        thou art more
+                        Predict:        to be or not to the
+                        Predict:        wherefore art thou comes sold Parson
+        Iterations: 60, Epoch: 1, Batch: 60 out of 181, Loss: 8.263978
+        Iterations: 70, Epoch: 1, Batch: 70 out of 181, Loss: 8.228113
+        Iterations: 80, Epoch: 1, Batch: 80 out of 181, Loss: 7.874139
+        Iterations: 90, Epoch: 1, Batch: 90 out of 181, Loss: 7.420459
+        Iterations: 100, Epoch: 1, Batch: 100 out of 181, Loss: 7.585550
+                        Predict:        thou art more
+                        Predict:        to be or not to
+                        Predict:        wherefore art thou
+        Iterations: 110, Epoch: 1, Batch: 110 out of 181, Loss: 7.352424
+        Iterations: 120, Epoch: 1, Batch: 120 out of 181, Loss: 7.273183
+        Iterations: 130, Epoch: 1, Batch: 130 out of 181, Loss: 6.945456
+        Iterations: 140, Epoch: 1, Batch: 140 out of 181, Loss: 7.327520
+        Iterations: 150, Epoch: 1, Batch: 150 out of 181, Loss: 6.941119
+                        Predict:        thou art more
+                        Predict:        to be or not to
+                        Predict:        wherefore art thou art
+        Iterations: 160, Epoch: 1, Batch: 160 out of 181, Loss: 6.982898
+        Iterations: 170, Epoch: 1, Batch: 170 out of 181, Loss: 6.957053
+        Iterations: 180, Epoch: 1, Batch: 180 out of 181, Loss: 6.780302
+Starting Epoch #2 of 10.
+        Iterations: 190, Epoch: 2, Batch: 9 out of 181, Loss: 7.063390
+        Iterations: 200, Epoch: 2, Batch: 19 out of 181, Loss: 6.840934
+                        Predict:        thou art more than the
+                        Predict:        to be or not to be
+                        Predict:        wherefore art thou art
+        Iterations: 210, Epoch: 2, Batch: 29 out of 181, Loss: 6.766195
+        Iterations: 220, Epoch: 2, Batch: 39 out of 181, Loss: 6.735742
+        Iterations: 230, Epoch: 2, Batch: 49 out of 181, Loss: 6.679669
+        Iterations: 240, Epoch: 2, Batch: 59 out of 181, Loss: 6.517890
+        Iterations: 250, Epoch: 2, Batch: 69 out of 181, Loss: 6.362247
+                        Predict:        thou art more than the
+                        Predict:        to be or not to the
+                        Predict:        wherefore art thou art
+        Iterations: 260, Epoch: 2, Batch: 79 out of 181, Loss: 6.577770
+        Iterations: 270, Epoch: 2, Batch: 89 out of 181, Loss: 6.424418
+        Iterations: 280, Epoch: 2, Batch: 99 out of 181, Loss: 6.659711
+        Iterations: 290, Epoch: 2, Batch: 109 out of 181, Loss: 6.365022
+        Iterations: 300, Epoch: 2, Batch: 119 out of 181, Loss: 6.533124
+                        Predict:        thou art more than the
+                        Predict:        to be or not to be
+                        Predict:        wherefore art thou hast thou art not
+        Iterations: 310, Epoch: 2, Batch: 129 out of 181, Loss: 6.699753
+        Iterations: 320, Epoch: 2, Batch: 139 out of 181, Loss: 6.479031
+        Iterations: 330, Epoch: 2, Batch: 149 out of 181, Loss: 6.371983
+        Iterations: 340, Epoch: 2, Batch: 159 out of 181, Loss: 6.561711
+        Iterations: 350, Epoch: 2, Batch: 169 out of 181, Loss: 6.414303
+                        Predict:        thou art more than the
+                        Predict:        to be or not to be a
+                        Predict:        wherefore art thou hast thou art thou art thou hast thou art thou
+        Iterations: 360, Epoch: 2, Batch: 179 out of 181, Loss: 6.700225
+Starting Epoch #3 of 10.
+        Iterations: 370, Epoch: 3, Batch: 8 out of 181, Loss: 6.561991
+        Iterations: 380, Epoch: 3, Batch: 18 out of 181, Loss: 6.416789
+        Iterations: 390, Epoch: 3, Batch: 28 out of 181, Loss: 6.451112
+        Iterations: 400, Epoch: 3, Batch: 38 out of 181, Loss: 6.442696
+                        Predict:        thou art more than the
+                        Predict:        to be or not to be
+                        Predict:        wherefore art thou hast thou art thou art thou art thou art thou
+        Iterations: 410, Epoch: 3, Batch: 48 out of 181, Loss: 6.251879
+        Iterations: 420, Epoch: 3, Batch: 58 out of 181, Loss: 6.373174
+        Iterations: 430, Epoch: 3, Batch: 68 out of 181, Loss: 6.409264
+        Iterations: 440, Epoch: 3, Batch: 78 out of 181, Loss: 6.699521
+        Iterations: 450, Epoch: 3, Batch: 88 out of 181, Loss: 6.525390
+                        Predict:        thou art more than the
+                        Predict:        to be or not to the
+                        Predict:        wherefore art thou hast thou art thou art thou
+        Iterations: 460, Epoch: 3, Batch: 98 out of 181, Loss: 6.517642
+        Iterations: 470, Epoch: 3, Batch: 108 out of 181, Loss: 6.313609
+        Iterations: 480, Epoch: 3, Batch: 118 out of 181, Loss: 6.312702
+        Iterations: 490, Epoch: 3, Batch: 128 out of 181, Loss: 6.109511
+        Iterations: 500, Epoch: 3, Batch: 138 out of 181, Loss: 6.605184
+Traceback (most recent call last):
+  File "ch9-3_rnn_lstm.py", line 490, in <module>
+    saver.save(sess, model_file_name, globel_step = iteration_count)
+TypeError: save() got an unexpected keyword argument 'globel_step'
+(myvenv) byj@ubri07:~/temporal$

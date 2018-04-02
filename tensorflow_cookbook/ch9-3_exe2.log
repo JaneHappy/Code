@@ -1,0 +1,328 @@
+Loading Shakespeare Data
+Cleaning Text
+Done loading/cleaning.
+Building Shakespeare Vocab
+Vocabulary Length = 9117
+Starting Epoch #1 of 10.
+	Iterations: 10, Epoch: 1, Batch: 10 out of 181, Loss: 10.120102
+	Iterations: 20, Epoch: 1, Batch: 20 out of 181, Loss: 9.390626
+	Iterations: 30, Epoch: 1, Batch: 30 out of 181, Loss: 8.656001
+	Iterations: 40, Epoch: 1, Batch: 40 out of 181, Loss: 8.534652
+	Iterations: 50, Epoch: 1, Batch: 50 out of 181, Loss: 8.269463
+			Predict:	thou art more Dismiss gentlewoman gold
+			Predict:	to be or not to the
+			Predict:	wherefore art thou ROSS sores SAY clean misfortune prick'd lamenting and
+	Iterations: 60, Epoch: 1, Batch: 60 out of 181, Loss: 8.056664
+	Iterations: 70, Epoch: 1, Batch: 70 out of 181, Loss: 7.910594
+	Iterations: 80, Epoch: 1, Batch: 80 out of 181, Loss: 8.228355
+	Iterations: 90, Epoch: 1, Batch: 90 out of 181, Loss: 7.903378
+	Iterations: 100, Epoch: 1, Batch: 100 out of 181, Loss: 7.734520
+			Predict:	thou art more
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art in this
+	Iterations: 110, Epoch: 1, Batch: 110 out of 181, Loss: 7.584301
+	Iterations: 120, Epoch: 1, Batch: 120 out of 181, Loss: 7.250766
+	Iterations: 130, Epoch: 1, Batch: 130 out of 181, Loss: 7.288431
+	Iterations: 140, Epoch: 1, Batch: 140 out of 181, Loss: 7.104284
+	Iterations: 150, Epoch: 1, Batch: 150 out of 181, Loss: 6.967916
+			Predict:	thou art more
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art art in this
+	Iterations: 160, Epoch: 1, Batch: 160 out of 181, Loss: 6.902534
+	Iterations: 170, Epoch: 1, Batch: 170 out of 181, Loss: 6.552739
+	Iterations: 180, Epoch: 1, Batch: 180 out of 181, Loss: 6.853310
+Starting Epoch #2 of 10.
+	Iterations: 190, Epoch: 2, Batch: 9 out of 181, Loss: 6.665993
+	Iterations: 200, Epoch: 2, Batch: 19 out of 181, Loss: 6.464151
+			Predict:	thou art more than the
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art art in the
+	Iterations: 210, Epoch: 2, Batch: 29 out of 181, Loss: 6.730831
+	Iterations: 220, Epoch: 2, Batch: 39 out of 181, Loss: 6.687459
+	Iterations: 230, Epoch: 2, Batch: 49 out of 181, Loss: 6.606386
+	Iterations: 240, Epoch: 2, Batch: 59 out of 181, Loss: 6.513375
+	Iterations: 250, Epoch: 2, Batch: 69 out of 181, Loss: 6.700194
+			Predict:	thou art more than the
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art thou art thou art thou art thou art thou
+	Iterations: 260, Epoch: 2, Batch: 79 out of 181, Loss: 6.385448
+	Iterations: 270, Epoch: 2, Batch: 89 out of 181, Loss: 6.386913
+	Iterations: 280, Epoch: 2, Batch: 99 out of 181, Loss: 6.370427
+	Iterations: 290, Epoch: 2, Batch: 109 out of 181, Loss: 6.438413
+	Iterations: 300, Epoch: 2, Batch: 119 out of 181, Loss: 6.444631
+			Predict:	thou art more than the
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art thou art thou art thou art thou art thou
+	Iterations: 310, Epoch: 2, Batch: 129 out of 181, Loss: 6.396252
+	Iterations: 320, Epoch: 2, Batch: 139 out of 181, Loss: 6.477702
+	Iterations: 330, Epoch: 2, Batch: 149 out of 181, Loss: 6.631156
+	Iterations: 340, Epoch: 2, Batch: 159 out of 181, Loss: 6.555378
+	Iterations: 350, Epoch: 2, Batch: 169 out of 181, Loss: 6.685573
+			Predict:	thou art more than the
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art thou art thou art thou art thou art thou
+	Iterations: 360, Epoch: 2, Batch: 179 out of 181, Loss: 6.757201
+Starting Epoch #3 of 10.
+	Iterations: 370, Epoch: 3, Batch: 8 out of 181, Loss: 6.536187
+	Iterations: 380, Epoch: 3, Batch: 18 out of 181, Loss: 6.214639
+	Iterations: 390, Epoch: 3, Batch: 28 out of 181, Loss: 6.655702
+	Iterations: 400, Epoch: 3, Batch: 38 out of 181, Loss: 6.221635
+			Predict:	thou art more than the
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art thou art thou art thou art thou art thou
+	Iterations: 410, Epoch: 3, Batch: 48 out of 181, Loss: 6.536348
+	Iterations: 420, Epoch: 3, Batch: 58 out of 181, Loss: 6.388805
+	Iterations: 430, Epoch: 3, Batch: 68 out of 181, Loss: 6.387378
+	Iterations: 440, Epoch: 3, Batch: 78 out of 181, Loss: 6.324234
+	Iterations: 450, Epoch: 3, Batch: 88 out of 181, Loss: 6.363739
+			Predict:	thou art more than the
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art thou art thou art thou art thou art thou
+	Iterations: 460, Epoch: 3, Batch: 98 out of 181, Loss: 6.317140
+	Iterations: 470, Epoch: 3, Batch: 108 out of 181, Loss: 6.400050
+	Iterations: 480, Epoch: 3, Batch: 118 out of 181, Loss: 6.377457
+	Iterations: 490, Epoch: 3, Batch: 128 out of 181, Loss: 6.641070
+	Iterations: 500, Epoch: 3, Batch: 138 out of 181, Loss: 6.414425
+		Model Saved To: shakespeare_model/model .
+			Predict:	thou art more than the
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art thou art thou art thou art thou art thou
+	Iterations: 510, Epoch: 3, Batch: 148 out of 181, Loss: 6.599578
+	Iterations: 520, Epoch: 3, Batch: 158 out of 181, Loss: 6.503968
+	Iterations: 530, Epoch: 3, Batch: 168 out of 181, Loss: 6.424757
+	Iterations: 540, Epoch: 3, Batch: 178 out of 181, Loss: 6.282261
+Starting Epoch #4 of 10.
+	Iterations: 550, Epoch: 4, Batch: 7 out of 181, Loss: 6.239814
+			Predict:	thou art more than the
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art thou art thou art thou art thou art thou
+	Iterations: 560, Epoch: 4, Batch: 17 out of 181, Loss: 6.062922
+	Iterations: 570, Epoch: 4, Batch: 27 out of 181, Loss: 6.492067
+	Iterations: 580, Epoch: 4, Batch: 37 out of 181, Loss: 6.470687
+	Iterations: 590, Epoch: 4, Batch: 47 out of 181, Loss: 6.290661
+	Iterations: 600, Epoch: 4, Batch: 57 out of 181, Loss: 6.227639
+			Predict:	thou art more than the
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art thou art thou art thou art thou art thou
+	Iterations: 610, Epoch: 4, Batch: 67 out of 181, Loss: 6.384098
+	Iterations: 620, Epoch: 4, Batch: 77 out of 181, Loss: 6.503688
+	Iterations: 630, Epoch: 4, Batch: 87 out of 181, Loss: 6.238574
+	Iterations: 640, Epoch: 4, Batch: 97 out of 181, Loss: 6.324852
+	Iterations: 650, Epoch: 4, Batch: 107 out of 181, Loss: 6.452290
+			Predict:	thou art more than the
+			Predict:	to be or not to
+			Predict:	wherefore art thou art thou art thou art thou art thou art thou
+	Iterations: 660, Epoch: 4, Batch: 117 out of 181, Loss: 6.179896
+	Iterations: 670, Epoch: 4, Batch: 127 out of 181, Loss: 6.290520
+	Iterations: 680, Epoch: 4, Batch: 137 out of 181, Loss: 6.397655
+	Iterations: 690, Epoch: 4, Batch: 147 out of 181, Loss: 6.493733
+	Iterations: 700, Epoch: 4, Batch: 157 out of 181, Loss: 6.311278
+			Predict:	thou art more than the
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art thou art thou art thou art thou art thou
+	Iterations: 710, Epoch: 4, Batch: 167 out of 181, Loss: 6.271099
+	Iterations: 720, Epoch: 4, Batch: 177 out of 181, Loss: 6.309721
+Starting Epoch #5 of 10.
+	Iterations: 730, Epoch: 5, Batch: 6 out of 181, Loss: 6.444737
+	Iterations: 740, Epoch: 5, Batch: 16 out of 181, Loss: 5.971192
+	Iterations: 750, Epoch: 5, Batch: 26 out of 181, Loss: 6.126384
+			Predict:	thou art more than the
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art thou art thou art thou art thou art thou
+	Iterations: 760, Epoch: 5, Batch: 36 out of 181, Loss: 6.202229
+	Iterations: 770, Epoch: 5, Batch: 46 out of 181, Loss: 5.919152
+	Iterations: 780, Epoch: 5, Batch: 56 out of 181, Loss: 6.334033
+	Iterations: 790, Epoch: 5, Batch: 66 out of 181, Loss: 6.359113
+	Iterations: 800, Epoch: 5, Batch: 76 out of 181, Loss: 6.142581
+			Predict:	thou art more than the
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art thou art thou art thou art thou art thou
+	Iterations: 810, Epoch: 5, Batch: 86 out of 181, Loss: 6.174151
+	Iterations: 820, Epoch: 5, Batch: 96 out of 181, Loss: 6.189414
+	Iterations: 830, Epoch: 5, Batch: 106 out of 181, Loss: 6.143654
+	Iterations: 840, Epoch: 5, Batch: 116 out of 181, Loss: 6.329263
+	Iterations: 850, Epoch: 5, Batch: 126 out of 181, Loss: 6.206732
+			Predict:	thou art more than the
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art thou art thou art thou art thou art thou
+	Iterations: 860, Epoch: 5, Batch: 136 out of 181, Loss: 6.224395
+	Iterations: 870, Epoch: 5, Batch: 146 out of 181, Loss: 6.455019
+	Iterations: 880, Epoch: 5, Batch: 156 out of 181, Loss: 6.144138
+	Iterations: 890, Epoch: 5, Batch: 166 out of 181, Loss: 6.096249
+	Iterations: 900, Epoch: 5, Batch: 176 out of 181, Loss: 6.245553
+			Predict:	thou art more than the
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art thou art thou art thou art thou art thou
+Starting Epoch #6 of 10.
+	Iterations: 910, Epoch: 6, Batch: 5 out of 181, Loss: 6.237948
+	Iterations: 920, Epoch: 6, Batch: 15 out of 181, Loss: 6.357199
+	Iterations: 930, Epoch: 6, Batch: 25 out of 181, Loss: 6.103367
+	Iterations: 940, Epoch: 6, Batch: 35 out of 181, Loss: 6.176923
+	Iterations: 950, Epoch: 6, Batch: 45 out of 181, Loss: 5.930376
+			Predict:	thou art more
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art thou art not so
+	Iterations: 960, Epoch: 6, Batch: 55 out of 181, Loss: 6.252751
+	Iterations: 970, Epoch: 6, Batch: 65 out of 181, Loss: 6.183138
+	Iterations: 980, Epoch: 6, Batch: 75 out of 181, Loss: 6.128751
+	Iterations: 990, Epoch: 6, Batch: 85 out of 181, Loss: 6.180558
+	Iterations: 1000, Epoch: 6, Batch: 95 out of 181, Loss: 6.014902
+		Model Saved To: shakespeare_model/model .
+			Predict:	thou art more than the
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art thou art thou art thou art thou art thou
+	Iterations: 1010, Epoch: 6, Batch: 105 out of 181, Loss: 6.064694
+	Iterations: 1020, Epoch: 6, Batch: 115 out of 181, Loss: 6.174751
+	Iterations: 1030, Epoch: 6, Batch: 125 out of 181, Loss: 6.047505
+	Iterations: 1040, Epoch: 6, Batch: 135 out of 181, Loss: 6.095589
+	Iterations: 1050, Epoch: 6, Batch: 145 out of 181, Loss: 6.377378
+			Predict:	thou art more than the
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art thou art thou art thou art thou art thou
+	Iterations: 1060, Epoch: 6, Batch: 155 out of 181, Loss: 6.086134
+	Iterations: 1070, Epoch: 6, Batch: 165 out of 181, Loss: 6.290575
+	Iterations: 1080, Epoch: 6, Batch: 175 out of 181, Loss: 6.103406
+Starting Epoch #7 of 10.
+	Iterations: 1090, Epoch: 7, Batch: 4 out of 181, Loss: 6.007038
+	Iterations: 1100, Epoch: 7, Batch: 14 out of 181, Loss: 6.143737
+			Predict:	thou art more
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art thou art thou art thou art thou art thou
+	Iterations: 1110, Epoch: 7, Batch: 24 out of 181, Loss: 6.146578
+	Iterations: 1120, Epoch: 7, Batch: 34 out of 181, Loss: 6.169432
+	Iterations: 1130, Epoch: 7, Batch: 44 out of 181, Loss: 6.025177
+	Iterations: 1140, Epoch: 7, Batch: 54 out of 181, Loss: 6.202694
+	Iterations: 1150, Epoch: 7, Batch: 64 out of 181, Loss: 6.083478
+			Predict:	thou art more
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art thou art not
+	Iterations: 1160, Epoch: 7, Batch: 74 out of 181, Loss: 6.038158
+	Iterations: 1170, Epoch: 7, Batch: 84 out of 181, Loss: 5.967744
+	Iterations: 1180, Epoch: 7, Batch: 94 out of 181, Loss: 6.048894
+	Iterations: 1190, Epoch: 7, Batch: 104 out of 181, Loss: 5.974620
+	Iterations: 1200, Epoch: 7, Batch: 114 out of 181, Loss: 6.042548
+			Predict:	thou art more than the
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art thou art thou art thou art thou art thou
+	Iterations: 1210, Epoch: 7, Batch: 124 out of 181, Loss: 6.053624
+	Iterations: 1220, Epoch: 7, Batch: 134 out of 181, Loss: 6.027723
+	Iterations: 1230, Epoch: 7, Batch: 144 out of 181, Loss: 6.131433
+	Iterations: 1240, Epoch: 7, Batch: 154 out of 181, Loss: 6.117114
+	Iterations: 1250, Epoch: 7, Batch: 164 out of 181, Loss: 5.712881
+			Predict:	thou art more than the
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art thou art thou art thou art thou art thou
+	Iterations: 1260, Epoch: 7, Batch: 174 out of 181, Loss: 6.092891
+Starting Epoch #8 of 10.
+	Iterations: 1270, Epoch: 8, Batch: 3 out of 181, Loss: 6.009228
+	Iterations: 1280, Epoch: 8, Batch: 13 out of 181, Loss: 6.147877
+	Iterations: 1290, Epoch: 8, Batch: 23 out of 181, Loss: 6.182658
+	Iterations: 1300, Epoch: 8, Batch: 33 out of 181, Loss: 5.936085
+			Predict:	thou art more than the
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art thou art thou art thou art thou art thou
+	Iterations: 1310, Epoch: 8, Batch: 43 out of 181, Loss: 6.079164
+	Iterations: 1320, Epoch: 8, Batch: 53 out of 181, Loss: 5.707983
+	Iterations: 1330, Epoch: 8, Batch: 63 out of 181, Loss: 5.899868
+	Iterations: 1340, Epoch: 8, Batch: 73 out of 181, Loss: 6.008610
+	Iterations: 1350, Epoch: 8, Batch: 83 out of 181, Loss: 6.042689
+			Predict:	thou art more than the
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art thou art not to be
+	Iterations: 1360, Epoch: 8, Batch: 93 out of 181, Loss: 5.967984
+	Iterations: 1370, Epoch: 8, Batch: 103 out of 181, Loss: 5.713779
+	Iterations: 1380, Epoch: 8, Batch: 113 out of 181, Loss: 6.242602
+	Iterations: 1390, Epoch: 8, Batch: 123 out of 181, Loss: 6.083947
+	Iterations: 1400, Epoch: 8, Batch: 133 out of 181, Loss: 6.087993
+			Predict:	thou art more
+			Predict:	to be or not to be
+			Predict:	wherefore art thou art thou art thou art thou art thou art thou
+	Iterations: 1410, Epoch: 8, Batch: 143 out of 181, Loss: 6.195710
+	Iterations: 1420, Epoch: 8, Batch: 153 out of 181, Loss: 5.702695
+	Iterations: 1430, Epoch: 8, Batch: 163 out of 181, Loss: 6.145229
+	Iterations: 1440, Epoch: 8, Batch: 173 out of 181, Loss: 6.144480
+Starting Epoch #9 of 10.
+	Iterations: 1450, Epoch: 9, Batch: 2 out of 181, Loss: 6.017469
+			Predict:	thou art more than the
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art thou art not
+	Iterations: 1460, Epoch: 9, Batch: 12 out of 181, Loss: 6.097422
+	Iterations: 1470, Epoch: 9, Batch: 22 out of 181, Loss: 5.853779
+	Iterations: 1480, Epoch: 9, Batch: 32 out of 181, Loss: 5.744684
+	Iterations: 1490, Epoch: 9, Batch: 42 out of 181, Loss: 6.022991
+	Iterations: 1500, Epoch: 9, Batch: 52 out of 181, Loss: 6.006547
+		Model Saved To: shakespeare_model/model .
+			Predict:	thou art more than the
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art not
+	Iterations: 1510, Epoch: 9, Batch: 62 out of 181, Loss: 6.095041
+	Iterations: 1520, Epoch: 9, Batch: 72 out of 181, Loss: 5.934966
+	Iterations: 1530, Epoch: 9, Batch: 82 out of 181, Loss: 6.292836
+	Iterations: 1540, Epoch: 9, Batch: 92 out of 181, Loss: 5.781116
+	Iterations: 1550, Epoch: 9, Batch: 102 out of 181, Loss: 5.920117
+			Predict:	thou art more than the
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art thou art not
+	Iterations: 1560, Epoch: 9, Batch: 112 out of 181, Loss: 5.902363
+	Iterations: 1570, Epoch: 9, Batch: 122 out of 181, Loss: 5.848465
+	Iterations: 1580, Epoch: 9, Batch: 132 out of 181, Loss: 6.022505
+	Iterations: 1590, Epoch: 9, Batch: 142 out of 181, Loss: 6.096036
+	Iterations: 1600, Epoch: 9, Batch: 152 out of 181, Loss: 6.033213
+			Predict:	thou art more than the
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art thou art thou art thou art thou art thou
+	Iterations: 1610, Epoch: 9, Batch: 162 out of 181, Loss: 5.979655
+	Iterations: 1620, Epoch: 9, Batch: 172 out of 181, Loss: 6.002162
+Starting Epoch #10 of 10.
+	Iterations: 1630, Epoch: 10, Batch: 1 out of 181, Loss: 6.237837
+	Iterations: 1640, Epoch: 10, Batch: 11 out of 181, Loss: 6.056068
+	Iterations: 1650, Epoch: 10, Batch: 21 out of 181, Loss: 5.860173
+			Predict:	thou art more than the
+			Predict:	to be or not to be
+			Predict:	wherefore art thou art not be
+	Iterations: 1660, Epoch: 10, Batch: 31 out of 181, Loss: 5.600064
+	Iterations: 1670, Epoch: 10, Batch: 41 out of 181, Loss: 5.707757
+	Iterations: 1680, Epoch: 10, Batch: 51 out of 181, Loss: 6.074575
+	Iterations: 1690, Epoch: 10, Batch: 61 out of 181, Loss: 5.720409
+	Iterations: 1700, Epoch: 10, Batch: 71 out of 181, Loss: 5.823150
+			Predict:	thou art more than the
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art thou art not
+	Iterations: 1710, Epoch: 10, Batch: 81 out of 181, Loss: 6.211535
+	Iterations: 1720, Epoch: 10, Batch: 91 out of 181, Loss: 6.042726
+	Iterations: 1730, Epoch: 10, Batch: 101 out of 181, Loss: 5.815696
+	Iterations: 1740, Epoch: 10, Batch: 111 out of 181, Loss: 5.911444
+	Iterations: 1750, Epoch: 10, Batch: 121 out of 181, Loss: 6.006112
+			Predict:	thou art more
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art thou art not for the
+	Iterations: 1760, Epoch: 10, Batch: 131 out of 181, Loss: 5.910658
+	Iterations: 1770, Epoch: 10, Batch: 141 out of 181, Loss: 5.683923
+	Iterations: 1780, Epoch: 10, Batch: 151 out of 181, Loss: 5.891233
+	Iterations: 1790, Epoch: 10, Batch: 161 out of 181, Loss: 5.937823
+	Iterations: 1800, Epoch: 10, Batch: 171 out of 181, Loss: 5.839485
+			Predict:	thou art more than the
+			Predict:	to be or not to the
+			Predict:	wherefore art thou art thou art not to be
+	Iterations: 1810, Epoch: 10, Batch: 181 out of 181, Loss: 5.976252
+
+------------------
+at 12:33
+
+(myvenv) byj@ubri07:~/temporal$ python ch9-3_rnn_lstm.py > ch9-3_exe2.log
+2018-04-02 12:31:59.023446: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+2018-04-02 12:31:59.412379: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1030] Found device 0 with properties:
+name: GeForce GTX 1080 Ti major: 6 minor: 1 memoryClockRate(GHz): 1.607
+pciBusID: 0000:03:00.0
+totalMemory: 10.91GiB freeMemory: 10.19GiB
+2018-04-02 12:31:59.798258: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1030] Found device 1 with properties:
+name: GeForce GTX 1080 Ti major: 6 minor: 1 memoryClockRate(GHz): 1.607
+pciBusID: 0000:81:00.0
+totalMemory: 10.91GiB freeMemory: 10.08GiB
+2018-04-02 12:31:59.798320: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Device peer to peer matrix
+2018-04-02 12:31:59.798367: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1051] DMA: 0 1
+2018-04-02 12:31:59.798378: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1061] 0:   Y N
+2018-04-02 12:31:59.798384: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1061] 1:   N Y
+2018-04-02 12:31:59.798400: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1120] Creating TensorFlow device (/device:GPU:0) -> (device: 0, name: GeForce GTX 1080 Ti, pci bus id: 0000:03:00.0, compute capability: 6.1)
+2018-04-02 12:31:59.798419: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1120] Creating TensorFlow device (/device:GPU:1) -> (device: 1, name: GeForce GTX 1080 Ti, pci bus id: 0000:81:00.0, compute capability: 6.1)
+(myvenv) byj@ubri07:~/temporal$

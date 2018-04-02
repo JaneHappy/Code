@@ -15,15 +15,21 @@ import pickle
 
 import numpy as np 
 
-#import matplotlib 
-#matplotlib.use('Agg')
+import matplotlib 
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt 
 
 import tensorflow as tf 
 from tensorflow.python.framework import ops 
 
 ops.reset_default_graph()
-sess = tf.Session()
+#sess = tf.Session()
+
+# 设置 GPU 按需增长
+config = tf.ConfigProto()
+config.gpu_options.allow_growth = True
+sess   = tf.Session(config=config)
+
 
 
 '''
@@ -44,7 +50,7 @@ prime_texts 		:	List of test sentences
 min_word_fred 	 = 5 		# Trim the less frequent words off
 rnn_size 		 = 128 		# RNN Model size
 embedding_size 	 = 100 		# Word embedding size
-epochs 			 = 2 #10 		# Number of epochs to cycle through data
+epochs 			 = 10 #2		# Number of epochs to cycle through data
 batch_size 		 = 100 		# Train on this many examples at once
 learning_rate 	 = 0.001 	# Learning rate
 training_seq_len = 50 		# How long of a word group to consider
@@ -481,7 +487,7 @@ for epoch in range(epochs):
 		if iteration_count % save_every == 0:
 			# Save model
 			model_file_name = os.path.join(full_model_dir, 'model')
-			saver.save(sess, model_file_name, globel_step = iteration_count)
+			saver.save(sess, model_file_name, global_step = iteration_count)
 			#print('Model Saved To: {}'.format(model_file_name))
 			print('\t\tModel Saved To: {} .'.format(model_file_name))
 			# Save vocabulary
@@ -545,6 +551,20 @@ Starting Epoch #2 of 2.
 	Iterations: 230, Epoch: 2, Batch: 49 out of 181, Loss: 6.654508
 [Cancelled]
 '''
+
+
+
+# Here is a plot of the training loss across the iterations.
+
+# Plot  loss over time
+plt.plot(train_loss, 'k-')
+plt.title('Sequence to Sequence Loss')
+plt.xlabel('Iterations')
+plt.ylabel('Loss')
+plt.show()
+
+iter_count = 2 #1
+plt.savefig("ch9-3_fig{}.png".format(iter_count))
 
 
 
